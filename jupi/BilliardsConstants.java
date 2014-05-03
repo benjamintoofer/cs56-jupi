@@ -3,16 +3,17 @@ package jupi;
 import java.awt.*;
 
 /**
- * Constants used to define billiards game parameters
+ * Constants used to define billiards game parameters. "Inches" means inches within the simulated world.
+ * The size taken on screen is equal to inches * pixelsPerInch.
  */
 
 public interface BilliardsConstants {
     int inchPerFoot = 12;
 
     /**
-     * {@code Dimension} containing the width and height, in inches, of the region which can contain balls.
+     * {@code double} array containing the width and height, in inches, of the region which can contain balls.
      */
-    Dimension tableDimension = new Dimension(inchPerFoot * 10, inchPerFoot * 5);
+    double[] tableDimension = new double[]{inchPerFoot * 10, inchPerFoot * 5};
 
     /**
      * Width, in inches, of the raised region surrounding the table. The balls bump into the cushions.
@@ -27,7 +28,11 @@ public interface BilliardsConstants {
     /**
      * Width, in inches, of the empty space surrounding the table and cushions.
      */
-    double floorWidth = inchPerFoot * 2;
+    double floorWidth = 12;
+
+    /**
+     * Diameter, in inches, of a ball.
+     */
     double ballDiameter = 2.375;
 
     /**
@@ -60,7 +65,7 @@ public interface BilliardsConstants {
     /**
      * Default color of the floor surrounding the table.
      */
-    Color floor = new Color(0x663300);
+    Color floor = new Color(0xbb7700);
 
     /**
      * Default color of the white ball.
@@ -81,4 +86,9 @@ public interface BilliardsConstants {
      * Default color for rendering edges of objects.
      */
     Color edge = Color.black;
+
+    /**
+     * Default color for rendering table markings.
+     */
+    Color mark = Color.white;
 }

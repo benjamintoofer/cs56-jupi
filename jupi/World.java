@@ -8,7 +8,6 @@ import javax.swing.*;
 
 public class World extends JApplet {
     private static World world = null;
-    private int pixelsPerInch;
 
     public static void main(String[] args) {
         World applet = new World();
@@ -23,7 +22,7 @@ public class World extends JApplet {
     }
 
     private World() {
-        pixelsPerInch = 4;
+        int pixelsPerInch = 8;
         CaromTable table = new CaromTable();
         table.setPixelsPerInch(pixelsPerInch);
         this.add(table);

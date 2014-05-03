@@ -8,21 +8,20 @@ import java.awt.*;
 
 public class Ball {
     private Color color;
-    private double radius;
-    private Point initialPosition;
-    private Point position;
+    private double[] initialPosition, position;
 
     /**
-     * Default constructor makes an odd-colored (blue) ball. Should not be used.
+     * Default constructor makes an odd-colored (blue) ball at position 0,0.
+     * Should not be used.
      */
     public Ball() {
-        this(Color.blue);
+        this(0, 0, Color.blue);
     }
 
-    public Ball(Color c) {
+    public Ball(double x, double y, Color c) {
+        initialPosition = new double[]{x, y};
+        position = new double[]{x, y};
         color = c;
-        radius = BilliardsConstants.ballDiameter / 2;
-        position = initialPosition;
     }
 
     public Color getColor() {
@@ -33,11 +32,11 @@ public class Ball {
         this.color = color;
     }
 
-    public Point getPosition() {
+    public double[] getPosition() {
         return position;
     }
 
-    public void setPosition(Point position) {
+    public void setPosition(double[] position) {
         this.position = position;
     }
 
