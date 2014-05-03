@@ -7,6 +7,9 @@ import javax.swing.*;
  */
 
 public class World extends JApplet {
+    private static World world = null;
+    private int pixelsPerInch;
+
     public static void main(String[] args) {
         World applet = new World();
         JFrame frame = new JFrame();
@@ -19,7 +22,16 @@ public class World extends JApplet {
         frame.setVisible(true);
     }
 
-    public World() {
+    private World() {
+        pixelsPerInch = 4;
+        CaromTable table = new CaromTable();
+        table.setPixelsPerInch(pixelsPerInch);
+        this.add(table);
+    }
 
+    public static synchronized World getInstance() {
+        if (world == null)
+            world = new World();
+        return world;
     }
 }
