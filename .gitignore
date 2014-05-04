@@ -1,0 +1,11 @@
+# Java artifacts
+*.class
+*.jar
+
+# IntelliJ Idea artifacts
+*.iml
+*.idea/
+*out/
+
+# vim artifacts
+*.swp
