@@ -5,12 +5,12 @@
 # vim artifacts
 *.swp
 
-# ignore everything
+# ignore everything but directories
 *
-*/*
+!*/
 
-# whitelist package source
-!jupi/
+# whitelist source
+!*.java
 
 # whitelist markdown
 !*.md
