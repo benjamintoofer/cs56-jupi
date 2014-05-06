@@ -1,11 +1,19 @@
 # Java artifacts
 *.class
-*.jar
-
-# IntelliJ Idea artifacts
-*.iml
-*.idea/
-*out/
+#*.jar
 
 # vim artifacts
 *.swp
+
+# ignore everything
+*
+*/*
+
+# whitelist package source
+!jupi/
+
+# whitelist markdown
+!*.md
+
+# whitelist gitignore
+!.gitignore
