@@ -18,7 +18,7 @@ public interface BilliardsConstants {
     /**
      * Width, in inches, of the felt-covered region surrounding the table. The balls bump into the cushions.
      */
-    double cushionWidth = 3;
+    double cushionWidth = 2;
 
     /**
      * Width, in inches, of the non-felt-covered region surrounding the cushions.

@@ -80,6 +80,14 @@ public class CaromTable extends JPanel {
         g.drawLine(cushionEdge + (int)dimCushion[0] * ppi, cushionEdge + (int)dimCushion[1] * ppi,
                 tableEdge + (int)dimTable[0] * ppi, tableEdge + (int)dimTable[1] * ppi);
 
+        g.setColor(mark);
+        int markRadius = (int)(cushionWidth / 2 * ppi);
+        for (int i = 0; i <= 9; i++) {
+            g.fillOval((int) (floorWidth + borderWidth + cushionWidth + i*dimTable[0]/9 - cushionWidth/2)*ppi,
+                    (int)(cushionEdge - borderWidth/2 - markRadius),
+                    markRadius, markRadius);
+        }
+
         for (Ball b: balls) {
             /* draw a circle outline for each ball */
             g.setColor(edge);
