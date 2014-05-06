@@ -16,9 +16,14 @@ public interface BilliardsConstants {
     double[] tableDimension = new double[]{inchPerFoot * 10, inchPerFoot * 5};
 
     /**
-     * Width, in inches, of the raised region surrounding the table. The balls bump into the cushions.
+     * Width, in inches, of the felt-covered region surrounding the table. The balls bump into the cushions.
      */
     double cushionWidth = 3;
+
+    /**
+     * Width, in inches, of the non-felt-covered region surrounding the cushions.
+     */
+    double borderWidth = 3;
 
     /**
      * Radius, in inches, of the table border's corners.
@@ -53,14 +58,14 @@ public interface BilliardsConstants {
     double minimumSpeed = 0.01;
 
     /**
-     * Default colors of the table felt.
+     * Default colors of the table felt, including both play area and cushions.
      */
     Color felt = new Color(0x008800);
 
     /**
-     * Default color of the table border (the cushions).
+     * Default color of the table border, outside the cushions.
      */
-    Color border = new Color(0x004400);
+    Color border = new Color(0x663300);
 
     /**
      * Default color of the floor surrounding the table.

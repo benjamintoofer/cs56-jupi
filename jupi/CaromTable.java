@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 
 public class CaromTable extends JPanel {
-    private double[] dimTable, dimBorder, dimFloor;
-    private double borderCorner, cushionWidth, floorWidth, radius;
+    private double[] dimTable, dimCushion, dimBorder, dimFloor;
+    private double borderCorner, borderWidth, cushionWidth, floorWidth, radius;
     private int ppi;
     private Ball cueball, redball, yellowball;
     private ArrayList<Ball> balls = new ArrayList<>();
@@ -21,12 +21,14 @@ public class CaromTable extends JPanel {
      */
     public CaromTable() {
         borderCorner = BilliardsConstants.borderCorner;
+        borderWidth = BilliardsConstants.borderWidth;
         cushionWidth = BilliardsConstants.cushionWidth;
         floorWidth = BilliardsConstants.floorWidth;
         radius = BilliardsConstants.ballDiameter / 2;
 
         dimTable = BilliardsConstants.tableDimension;
-        dimBorder = new double[]{dimTable[0] + 2*cushionWidth, dimTable[1] + 2*cushionWidth};
+        dimCushion = new double[]{dimTable[0] + 2*cushionWidth, dimTable[1] + 2*cushionWidth};
+        dimBorder = new double[]{dimCushion[0] + 2*borderWidth, dimCushion[1] + 2*borderWidth};
         dimFloor = new double[]{dimBorder[0] + 2*floorWidth, dimBorder[1] + 2*floorWidth};
 
         cueball = new Ball(dimTable[0] / 3, dimTable[1] / 2, BilliardsConstants.white);
@@ -47,24 +49,35 @@ public class CaromTable extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        /* draw a filled rectangle for the floor surrounding the table border */
         g.setColor(floor);
         g.fillRect(0, 0, (int)(dimFloor[0] * ppi), (int)(dimFloor[1] * ppi));
 
+        /* draw a filled round rect for the rail border surrounding the cushions */
         g.setColor(border);
         g.fillRoundRect((int)(floorWidth * ppi), (int)(floorWidth * ppi),
                 (int)(dimBorder[0] * ppi), (int)(dimBorder[1] * ppi),
                 (int)borderCorner * ppi, (int) borderCorner * ppi);
 
+        /* draw a filled rectangle for the play area plus the cushions */
         g.setColor(felt);
-        g.fillRect((int)((floorWidth + cushionWidth) * ppi),
-                (int)((floorWidth + cushionWidth) * ppi),
+        g.fillRect((int)((floorWidth + borderWidth) * ppi),
+                (int)((floorWidth + borderWidth) * ppi),
+                (int)(dimCushion[0] * ppi), (int)(dimCushion[1] * ppi));
+
+        /* draw a rectangle outline for the play area */
+        g.setColor(edge);
+        g.drawRect((int)((floorWidth + borderWidth + cushionWidth) * ppi),
+                (int)((floorWidth + borderWidth + cushionWidth) * ppi),
                 (int)(dimTable[0] * ppi), (int)(dimTable[1] * ppi));
 
         for (Ball b: balls) {
+            /* draw a circle outline for each ball */
             g.setColor(edge);
             g.drawOval((int)((floorWidth + cushionWidth + b.getPosition()[0]-radius) * ppi),
                     (int)((floorWidth + cushionWidth + b.getPosition()[1]-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
+            /* draw a filled circle for each ball */
             g.setColor(b.getColor());
             g.fillOval((int)((floorWidth + cushionWidth + b.getPosition()[0]-radius) * ppi),
                     (int)((floorWidth + cushionWidth + b.getPosition()[1]-radius) * ppi),
