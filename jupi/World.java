@@ -17,7 +17,7 @@ public class World extends JApplet {
         frame.pack();
         frame.setMinimumSize(frame.getSize());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLocationByPlatform(true);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 

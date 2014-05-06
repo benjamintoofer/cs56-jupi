@@ -48,6 +48,8 @@ public class CaromTable extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        int cushionEdge = (int) ((floorWidth + borderWidth) * ppi);
+        int tableEdge = (int) ((floorWidth + borderWidth + cushionWidth) * ppi);
 
         /* draw a filled rectangle for the floor surrounding the table border */
         g.setColor(floor);
@@ -61,15 +63,22 @@ public class CaromTable extends JPanel {
 
         /* draw a filled rectangle for the play area plus the cushions */
         g.setColor(felt);
-        g.fillRect((int)((floorWidth + borderWidth) * ppi),
-                (int)((floorWidth + borderWidth) * ppi),
+        g.fillRect(cushionEdge, cushionEdge,
                 (int)(dimCushion[0] * ppi), (int)(dimCushion[1] * ppi));
 
         /* draw a rectangle outline for the play area */
         g.setColor(edge);
-        g.drawRect((int)((floorWidth + borderWidth + cushionWidth) * ppi),
-                (int)((floorWidth + borderWidth + cushionWidth) * ppi),
+        g.drawRect(tableEdge, tableEdge,
                 (int)(dimTable[0] * ppi), (int)(dimTable[1] * ppi));
+
+        /* draw a line segment connecting the play field corners to each border corner */
+        g.drawLine(cushionEdge, cushionEdge, tableEdge, tableEdge);
+        g.drawLine(cushionEdge + (int)dimCushion[0] * ppi, cushionEdge,
+                tableEdge + (int)dimTable[0] * ppi, tableEdge);
+        g.drawLine(cushionEdge, cushionEdge + (int)dimCushion[1] * ppi,
+                tableEdge, tableEdge + (int) dimTable[1] * ppi);
+        g.drawLine(cushionEdge + (int)dimCushion[0] * ppi, cushionEdge + (int)dimCushion[1] * ppi,
+                tableEdge + (int)dimTable[0] * ppi, tableEdge + (int)dimTable[1] * ppi);
 
         for (Ball b: balls) {
             /* draw a circle outline for each ball */
