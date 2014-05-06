@@ -1,3 +1,17 @@
+# ignore everything but directories
+*
+!*/
+
+
+# whitelist source, markdown, gitignore
+!*.java
+!*.md
+!.gitignore
+
+
+# blacklist IDE artifacts
+out/
+
 # Java artifacts
 *.class
 #*.jar
@@ -5,15 +19,3 @@
 # vim artifacts
 *.swp
 
-# ignore everything but directories
-*
-!*/
-
-# whitelist source
-!*.java
-
-# whitelist markdown
-!*.md
-
-# whitelist gitignore
-!.gitignore
