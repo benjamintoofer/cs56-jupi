@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class World extends JApplet {
     private static World world = null;
-
+    //Hello
     public static void main(String[] args) {
         World applet = new World();
         JFrame frame = new JFrame();
