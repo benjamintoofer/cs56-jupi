@@ -6,10 +6,12 @@ import javax.swing.*;
  * and contains the {@code main} method, for running as an application.
  */
 
-public class World extends JApplet {
+public class World extends JApplet 
+{
     private static World world = null;
-    //Hello
-    public static void main(String[] args) {
+   
+    public static void main(String[] args) 
+    {
         World applet = new World();
         JFrame frame = new JFrame();
         frame.add(applet);
@@ -21,7 +23,13 @@ public class World extends JApplet {
         frame.setVisible(true);
     }
 
-    private World() {
+    //private World()
+    //made public so it can also run as an Applet
+    public World()
+    {
+    	// prevent more than one world from being constructed:
+    	if (world != null)
+    		throw new RuntimeException();
         int pixelsPerInch = 8;
         CaromTable table = new CaromTable();
         table.setPixelsPerInch(pixelsPerInch);
