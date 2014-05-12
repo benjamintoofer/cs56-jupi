@@ -31,13 +31,15 @@ public class CaromTable extends JPanel {
         dimBorder = new double[]{dimCushion[0] + 2*borderWidth, dimCushion[1] + 2*borderWidth};
         dimFloor = new double[]{dimBorder[0] + 2*floorWidth, dimBorder[1] + 2*floorWidth};
 
-        cueball = new Ball(dimTable[0] / 3, dimTable[1] / 2, BilliardsConstants.white);
-        redball = new Ball(dimTable[0] * 2 / 3, dimTable[1] * 2 / 5, BilliardsConstants.red);
-        yellowball = new Ball(dimTable[0] * 2 / 3, dimTable[1] * 3 / 5, BilliardsConstants.yellow);
+        cueball = new Ball(dimTable[0] / 3, dimTable[1] / 2,radius,10, BilliardsConstants.white);
+        redball = new Ball(dimTable[0] * 2 / 3, dimTable[1] * 2 / 5,radius,10, BilliardsConstants.red);
+        yellowball = new Ball(dimTable[0] * 2 / 3, dimTable[1] * 3 / 5,radius,10, BilliardsConstants.yellow);
         balls.add(cueball);
         balls.add(redball);
         balls.add(yellowball);
-
+        
+        cueball.setVelocity(-1,0);
+        
         felt = BilliardsConstants.felt;
         border = BilliardsConstants.border;
         floor = BilliardsConstants.floor;
@@ -50,7 +52,7 @@ public class CaromTable extends JPanel {
         super.paintComponent(g);
         int cushionEdge = (int) ((floorWidth + borderWidth) * ppi);
         int tableEdge = (int) ((floorWidth + borderWidth + cushionWidth) * ppi);
-
+        
         /* draw a filled rectangle for the floor surrounding the table border */
         g.setColor(floor);
         g.fillRect(0, 0, (int)(dimFloor[0] * ppi), (int)(dimFloor[1] * ppi));
@@ -69,7 +71,7 @@ public class CaromTable extends JPanel {
         /* draw a rectangle outline for the play area */
         g.setColor(edge);
         g.drawRect(tableEdge, tableEdge,
-                (int)(dimTable[0] * ppi), (int)(dimTable[1] * ppi));
+                (int)(dimTable[0] * ppi), (int)(dimTable[1] * ppi));System.out.println((int)(dimTable[0] * ppi));
 
         /* draw a line segment connecting the play field corners to each border corner */
         g.drawLine(cushionEdge, cushionEdge, tableEdge, tableEdge);
@@ -87,17 +89,17 @@ public class CaromTable extends JPanel {
                     (int)(cushionEdge - borderWidth/2 - markRadius),
                     markRadius, markRadius);
         }
-
+        
         for (Ball b: balls) {
-            /* draw a circle outline for each ball */
+            // draw a circle outline for each ball 
             g.setColor(edge);
-            g.drawOval((int)((floorWidth + cushionWidth + b.getPosition()[0]-radius) * ppi),
-                    (int)((floorWidth + cushionWidth + b.getPosition()[1]-radius) * ppi),
+            g.drawOval((int)((floorWidth + cushionWidth + b.getPosition().x-radius) * ppi),
+                    (int)((floorWidth + cushionWidth + b.getPosition().y-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
-            /* draw a filled circle for each ball */
+            // draw a filled circle for each ball 
             g.setColor(b.getColor());
-            g.fillOval((int)((floorWidth + cushionWidth + b.getPosition()[0]-radius) * ppi),
-                    (int)((floorWidth + cushionWidth + b.getPosition()[1]-radius) * ppi),
+            g.fillOval((int)((floorWidth + cushionWidth + b.getPosition().x-radius) * ppi),
+                    (int)((floorWidth + cushionWidth + b.getPosition().y-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
         }
     }
@@ -111,9 +113,24 @@ public class CaromTable extends JPanel {
             throw new IllegalArgumentException("Pixels per inch must be positive.");
         this.ppi = pixelsPerInch;
     }
+    //Get Table Dimesnions
+    public double getTableWidth()
+    {
+    	return dimTable[0]  * ppi;
+    }
+    public double getTableHeight()
+    {
+    	return dimTable[1] * ppi;
+    }
 
     @Override
     public Dimension getPreferredSize() {
         return new Dimension((int)(dimFloor[0] * ppi), (int)(dimFloor[1] * ppi));
+    }
+    public void update()
+    {
+    	Physics.checkCusionCollision(cueball, this);
+    	cueball.update();
+    	repaint();
     }
 }

@@ -1,4 +1,5 @@
 package jupi;
+import java.awt.Color;
 import javax.swing.*;
 
 /**
@@ -22,10 +23,24 @@ public class World extends JApplet {
     }
 
     private World() {
-        int pixelsPerInch = 8;
-        CaromTable table = new CaromTable();
-        table.setPixelsPerInch(pixelsPerInch);
+        final CaromTable table = new CaromTable();
+        table.setPixelsPerInch(BilliardsConstants.pixelsPerInch);
         this.add(table);
+        
+        //Game Thread
+        Thread gameThread = new Thread(new Runnable(){
+        	public void run()
+        	{
+        		try{
+        			while(true)
+        			{
+        				table.update();
+        				Thread.sleep(100);
+        			}
+        		}catch(InterruptedException ex ){}
+        	}
+        });
+        gameThread.start();
     }
 
     public static synchronized World getInstance() {

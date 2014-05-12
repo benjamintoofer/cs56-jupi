@@ -2,11 +2,13 @@ package jupi;
 
 import java.awt.*;
 
+import javax.swing.*;
+
 /**
  * Class defining a billiards ball.
  */
 
-public class Ball {
+public class Ball{
     private Color color;
     private VectorDouble position, velocity;
     private double mass,radius;
@@ -26,6 +28,7 @@ public class Ball {
         this.radius = radius;
         this.mass = mass;
         color = c;
+        
     }
 
     public Color getColor() {
@@ -37,9 +40,14 @@ public class Ball {
     }
 
     public VectorDouble getPosition() {
+    	
         return position;
     }
-
+    public VectorDouble getPositionInPixels(){
+    	VectorDouble positionCoverted = new VectorDouble(position.x * BilliardsConstants.pixelsPerInch,
+				 										 position.y * BilliardsConstants.pixelsPerInch);
+    	return positionCoverted;
+    }
     public void setPosition(VectorDouble position) {
         this.position = position;
     }
@@ -73,9 +81,23 @@ public class Ball {
     {
     	return radius;
     }
+    public double getRadiusInPixels()
+    {
+    	return radius * BilliardsConstants.pixelsPerInch;
+    }
     public double getMass()
     {
     	return mass;
     }
+    
+    //Update balls properties
+    public void update()
+    {
+    	
+    	position.x += velocity.x;
+    	position.y += velocity.y;
+    	
+    }
+  
 
 }

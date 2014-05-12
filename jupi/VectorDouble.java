@@ -37,5 +37,9 @@ public class VectorDouble extends Point2D{
 	{
 		return magnitude;
 	}
+	public String toString()
+	{
+		return ("X: "+x+" Y: "+y+" Magnitude: "+magnitude);
+	}
 
 }

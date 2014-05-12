@@ -11,9 +11,21 @@ public class Physics {
 	public static void checkCusionCollision(Ball ball,CaromTable table)
 	{
 		//Collision with left wall
-		if((ball.getPosition().x - ball.getRadius() < 0) && (ball.getVelocity().x < 0))
+		if((ball.getPositionInPixels().x - ball.getRadiusInPixels()) - BilliardsConstants.cushionWidth < 0 && (ball.getVelocity().x < 0))
 		{
 			ball.reflect(true, false);
+		}
+		//Collision with right wall
+		//System.out.println(ball.getPosition().x +"  "+table.getTableWidth());
+		if((ball.getPositionInPixels().x + (ball.getRadiusInPixels()) > table.getTableWidth()) && (ball.getVelocity().x > 0))
+		{
+			ball.reflect(true, false);
+		}
+		//Collision with bottom wall
+		System.out.println((table.getTableHeight() - 415));
+		if((ball.getPosition().y + ball.getRadius() > (table.getTableHeight() - 415)) && (ball.getVelocity().y > 0))
+		{
+			ball.reflect(false, true);
 		}
 	}
 }

@@ -8,6 +8,8 @@ import java.awt.*;
  */
 
 public interface BilliardsConstants {
+	int pixelsPerInch = 8;
+	
     int inchPerFoot = 12;
 
     /**
