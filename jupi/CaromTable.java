@@ -71,7 +71,7 @@ public class CaromTable extends JPanel {
         /* draw a rectangle outline for the play area */
         g.setColor(edge);
         g.drawRect(tableEdge, tableEdge,
-                (int)(dimTable[0] * ppi), (int)(dimTable[1] * ppi));System.out.println((int)(dimTable[0] * ppi));
+                (int)(dimTable[0] * ppi), (int)(dimTable[1] * ppi));
 
         /* draw a line segment connecting the play field corners to each border corner */
         g.drawLine(cushionEdge, cushionEdge, tableEdge, tableEdge);
