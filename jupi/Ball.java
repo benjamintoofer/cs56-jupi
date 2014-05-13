@@ -17,7 +17,7 @@ public class Ball
      */
     public Ball() 
     {
-        this(0, 0, 20, 10, Color.blue);
+        this(0, 0, 20, BilliardsConstants.BALL_MASS, Color.blue);    	
     }
 
     public Ball(double x, double y, double radius, double mass, Color c) 
@@ -29,6 +29,12 @@ public class Ball
         color       = c;
     }
 
+    public Ball(double x, double y, Color c) 
+    {   
+    	this(x,y, BilliardsConstants.BALL_DIAMETER/2, BilliardsConstants.BALL_MASS, c);
+    }
+    
+    
     public Color getColor() 
     {
         return color;

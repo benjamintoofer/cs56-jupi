@@ -39,6 +39,12 @@ public interface BilliardsConstants
      * Ball diameter, in inches.
      */
     double BALL_DIAMETER = 2.375;
+    
+    /**
+     * Ball Mass, in grams.
+     */
+    double BALL_MASS = 210;
+    
 
     /**
      * Simulated time, in milliseconds, between updating the world state.
