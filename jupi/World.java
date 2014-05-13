@@ -35,7 +35,7 @@ public class World extends JApplet {
         			while(true)
         			{
         				table.update();
-        				Thread.sleep(100);
+        				Thread.sleep(30);
         			}
         		}catch(InterruptedException ex ){}
         	}

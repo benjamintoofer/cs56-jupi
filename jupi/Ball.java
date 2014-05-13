@@ -43,11 +43,6 @@ public class Ball{
     	
         return position;
     }
-    public VectorDouble getPositionInPixels(){
-    	VectorDouble positionCoverted = new VectorDouble(position.x * BilliardsConstants.pixelsPerInch,
-				 										 position.y * BilliardsConstants.pixelsPerInch);
-    	return positionCoverted;
-    }
     public void setPosition(VectorDouble position) {
         this.position = position;
     }
@@ -81,10 +76,7 @@ public class Ball{
     {
     	return radius;
     }
-    public double getRadiusInPixels()
-    {
-    	return radius * BilliardsConstants.pixelsPerInch;
-    }
+
     public double getMass()
     {
     	return mass;

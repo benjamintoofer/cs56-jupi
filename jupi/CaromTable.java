@@ -30,7 +30,7 @@ public class CaromTable extends JPanel {
         dimCushion = new double[]{dimTable[0] + 2*cushionWidth, dimTable[1] + 2*cushionWidth};
         dimBorder = new double[]{dimCushion[0] + 2*borderWidth, dimCushion[1] + 2*borderWidth};
         dimFloor = new double[]{dimBorder[0] + 2*floorWidth, dimBorder[1] + 2*floorWidth};
-
+        
         cueball = new Ball(dimTable[0] / 3, dimTable[1] / 2,radius,10, BilliardsConstants.white);
         redball = new Ball(dimTable[0] * 2 / 3, dimTable[1] * 2 / 5,radius,10, BilliardsConstants.red);
         yellowball = new Ball(dimTable[0] * 2 / 3, dimTable[1] * 3 / 5,radius,10, BilliardsConstants.yellow);
@@ -38,7 +38,9 @@ public class CaromTable extends JPanel {
         balls.add(redball);
         balls.add(yellowball);
         
-        cueball.setVelocity(-1,0);
+        cueball.setVelocity(2,1);
+        redball.setVelocity(1.3,3);
+        yellowball.setVelocity(2.3,2.5);
         
         felt = BilliardsConstants.felt;
         border = BilliardsConstants.border;
@@ -93,14 +95,18 @@ public class CaromTable extends JPanel {
         for (Ball b: balls) {
             // draw a circle outline for each ball 
             g.setColor(edge);
-            g.drawOval((int)((floorWidth + cushionWidth + b.getPosition().x-radius) * ppi),
-                    (int)((floorWidth + cushionWidth + b.getPosition().y-radius) * ppi),
+            g.drawOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
+                    (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
+            
+            
+            
             // draw a filled circle for each ball 
             g.setColor(b.getColor());
-            g.fillOval((int)((floorWidth + cushionWidth + b.getPosition().x-radius) * ppi),
-                    (int)((floorWidth + cushionWidth + b.getPosition().y-radius) * ppi),
+            g.fillOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
+                    (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
+          
         }
     }
 
@@ -116,11 +122,11 @@ public class CaromTable extends JPanel {
     //Get Table Dimesnions
     public double getTableWidth()
     {
-    	return dimTable[0]  * ppi;
+    	return dimTable[0];
     }
     public double getTableHeight()
     {
-    	return dimTable[1] * ppi;
+    	return dimTable[1];
     }
 
     @Override
@@ -129,8 +135,12 @@ public class CaromTable extends JPanel {
     }
     public void update()
     {
-    	Physics.checkCusionCollision(cueball, this);
-    	cueball.update();
+    	for(Ball b:balls)
+    	{
+    		Physics.checkCusionCollision(b, this);
+    		b.update();
+    	}
+    	
     	repaint();
     }
 }

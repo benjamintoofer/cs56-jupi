@@ -8,23 +8,43 @@ import javax.swing.*;
 
 public class Physics {
 	
+	private static int  ppi = BilliardsConstants.pixelsPerInch;
+	
+	
 	public static void checkCusionCollision(Ball ball,CaromTable table)
 	{
+		double xPos = ball.getPosition().x;
+		double yPos = ball.getPosition().y;
+		double radius = ball.getRadius();
+		double rightCushion = table.getTableWidth();
+		double leftCushion = 0, topCushion = 0;
+		double bottomCushion = table.getTableHeight();
+		
+		
 		//Collision with left wall
-		if((ball.getPositionInPixels().x - ball.getRadiusInPixels()) - BilliardsConstants.cushionWidth*8 < 0 && (ball.getVelocity().x < 0))
+		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0))
 		{
+			ball.setPosition(leftCushion + radius, yPos);
 			ball.reflect(true, false);
+			
+			
 		}
 		//Collision with right wall
-		//System.out.println(ball.getPosition().x +"  "+table.getTableWidth());
-		if((ball.getPositionInPixels().x + (ball.getRadiusInPixels()) > table.getTableWidth()+ BilliardsConstants.cushionWidth*8) && (ball.getVelocity().x > 0))
+		if(xPos + radius > rightCushion && (ball.getVelocity().x > 0))
 		{
+			ball.setPosition(rightCushion - radius, yPos);
 			ball.reflect(true, false);
 		}
 		//Collision with bottom wall
-		System.out.println((table.getTableHeight() - 415));
-		if((ball.getPosition().y + ball.getRadius() > (table.getTableHeight() - 415)) && (ball.getVelocity().y > 0))
+		if(yPos + radius > bottomCushion && (ball.getVelocity().y > 0))
 		{
+			ball.setPosition(xPos,bottomCushion - radius);
+			ball.reflect(false, true);
+		}
+		//Collision with top wall
+		if(yPos - radius < topCushion && ball.getVelocity().y < 0)
+		{
+			ball.setPosition(xPos,radius);
 			ball.reflect(false, true);
 		}
 	}
