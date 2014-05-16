@@ -30,6 +30,7 @@ public class CaromTable extends JPanel {
         dimCushion = new double[]{dimTable[0] + 2*cushionWidth, dimTable[1] + 2*cushionWidth};
         dimBorder = new double[]{dimCushion[0] + 2*borderWidth, dimCushion[1] + 2*borderWidth};
         dimFloor = new double[]{dimBorder[0] + 2*floorWidth, dimBorder[1] + 2*floorWidth};
+
         
         cueball = new Ball(dimTable[0] / 3, dimTable[1] / 2,radius,10, BilliardsConstants.white);
         redball = new Ball(dimTable[0] * 2 / 3, dimTable[1] * 2 / 5,radius,10, BilliardsConstants.red);
@@ -42,6 +43,7 @@ public class CaromTable extends JPanel {
         redball.setVelocity(1.3,3);
         yellowball.setVelocity(2.3,2.5);
         
+
         felt = BilliardsConstants.felt;
         border = BilliardsConstants.border;
         floor = BilliardsConstants.floor;
@@ -91,6 +93,7 @@ public class CaromTable extends JPanel {
                     (int)(cushionEdge - borderWidth/2 - markRadius),
                     markRadius, markRadius);
         }
+
         
         for (Ball b: balls) {
             // draw a circle outline for each ball 
@@ -98,9 +101,7 @@ public class CaromTable extends JPanel {
             g.drawOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
                     (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
-            
-            
-            
+
             // draw a filled circle for each ball 
             g.setColor(b.getColor());
             g.fillOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
@@ -108,6 +109,7 @@ public class CaromTable extends JPanel {
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
           
         }
+    
     }
 
     public int getPixelsPerInch() {
