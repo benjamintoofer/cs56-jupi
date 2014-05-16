@@ -12,8 +12,8 @@ public class World extends JApplet
     private static World world = null;
    
     public static void main(String[] args) 
-    {
-        World applet = new World();
+    {        
+    	World applet = World.getInstance();
         JFrame frame = new JFrame();
         frame.add(applet);
         frame.setTitle("Jupi: Carom Billiards");
@@ -22,7 +22,7 @@ public class World extends JApplet
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }
+    }//main
 
 
    // private World() {
@@ -30,8 +30,8 @@ public class World extends JApplet
        // table.setPixelsPerInch(BilliardsConstants.pixelsPerInch);
 
     //private World()
-    //made public so it can also run as an Applet
-    public World()
+    //made public so it can also run as an Applet  
+    public World()    
     {
     	// prevent more than one world from being constructed:
     	if (world != null)
@@ -41,6 +41,7 @@ public class World extends JApplet
         table.setPixelsPerInch(pixelsPerInch);
 
         this.add(table);
+
         
         //Game Thread
         Thread gameThread = new Thread(new Runnable(){
@@ -56,11 +57,15 @@ public class World extends JApplet
         	}
         });
         gameThread.start();
-    }
 
-    public static synchronized World getInstance() {
+    }//World()
+
+
+    public static synchronized World getInstance() 
+    {
         if (world == null)
             world = new World();
         return world;
     }
-}
+    
+}//World

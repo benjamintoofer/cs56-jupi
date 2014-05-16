@@ -1,14 +1,13 @@
 package jupi;
-
-
 import java.awt.*;
-
 import javax.swing.*;
 
 
-public class Physics {
+
+public class Physics 
+{
 	
-	private static int  ppi = BilliardsConstants.pixelsPerInch;
+	private static int  ppi = BilliardsConstants.PIXELS_PER_INCH;
 	
 	
 	public static void checkCusionCollision(Ball ball,CaromTable table)
@@ -24,17 +23,19 @@ public class Physics {
 		//Collision with left wall
 		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0))
 		{
-			ball.setPosition(leftCushion + radius, yPos);
+			ball.setPosition(radius, yPos);
 			ball.reflect(true, false);
 			
 			
 		}
 		//Collision with right wall
 		if(xPos + radius > rightCushion && (ball.getVelocity().x > 0))
+
 		{
 			ball.setPosition(rightCushion - radius, yPos);
 			ball.reflect(true, false);
 		}
+
 		//Collision with bottom wall
 		if(yPos + radius > bottomCushion && (ball.getVelocity().y > 0))
 		{
@@ -47,5 +48,9 @@ public class Physics {
 			ball.setPosition(xPos,radius);
 			ball.reflect(false, true);
 		}
-	}
-}
+	
+		
+	}//checkCusionCollision
+	
+}//Physics
+
