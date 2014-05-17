@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class CaromTable extends JPanel 
 {
     private double[] dimTable, dimCushion, dimBorder, dimFloor;
-    private double borderCorner, borderWidth, cushionWidth, floorWidth, radius,mass;
+    private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass;
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
     private ArrayList<Ball> balls = new ArrayList<>();
@@ -42,9 +42,9 @@ public class CaromTable extends JPanel
         balls.add(redball);
         balls.add(yellowball);
         
-        whiteball.setVelocity(2,1);
-        redball.setVelocity(1.3,3);
-        yellowball.setVelocity(2.3,2.5);
+        whiteball.setVelocity(.2,.1);
+        redball.setVelocity(.13,.3);
+        yellowball.setVelocity(.23,.25);
         
         felt   = BilliardsConstants.FELT;
         border = BilliardsConstants.BORDER;
@@ -61,7 +61,6 @@ public class CaromTable extends JPanel
         int x, y, width, height;
         int cushionEdge = (int) ((floorWidth + borderWidth) * ppi);
         int tableEdge   = (int) ((floorWidth + borderWidth + cushionWidth) * ppi);
-
 
         /* draw a filled rectangle for the floor surrounding the table border */
         g.setColor(floor);
@@ -96,16 +95,36 @@ public class CaromTable extends JPanel
 
         /* draw filled circles to mark the edges */
         g.setColor(mark);
-        int markRadius = (int)(cushionWidth / 2 * ppi), marks = 8;
-        for (int i = 0; i <= marks; i++) {
-            g.fillOval((int) (floorWidth + borderWidth + cushionWidth + i*dimTable[0]/marks - cushionWidth/2)*ppi,
-                    (int)(cushionEdge - borderWidth/2 - markRadius),
-                    markRadius, markRadius);
-        }
-
+        int markRadius = (int)(cushionWidth / 2 * ppi); 
+        int marks = 8;
+        int sideMarks = 3;
         
-        for (Ball b: balls) {
-            // draw a circle outline for each ball 
+        for (int i = 0; i <= marks; i++) 
+        {   
+        	//Top border markers:
+        	g.fillOval((int)(cushionEdge + (cushionWidth/2 + i*dimTable[0]/marks )*ppi),        			   
+        			   (int)(cushionEdge - markRadius - borderWidth/2),
+        			   markRadius, markRadius);
+            //Bottom border markers:                                 
+            g.fillOval((int)(cushionEdge + (cushionWidth/2 + i*dimTable[0]/marks )*ppi),
+            		   (int)(cushionEdge + (dimTable[1] + 2*cushionWidth)* ppi + borderWidth/2),                      
+            		   markRadius, markRadius);
+        }
+        
+        for (int i = 1; i <= sideMarks; i++) 
+        {
+        	//Left border markers:
+        	g.fillOval((int)(cushionEdge - markRadius - borderWidth/2),        			   
+     			       (int)(cushionEdge + (i*dimTable[1]/(sideMarks+1))*ppi),
+     			       markRadius, markRadius);
+        	//Right border markers:
+        	g.fillOval((int)(cushionEdge + (2*cushionWidth + dimTable[0])*ppi + borderWidth/2),        			   
+  			       	   (int)(cushionEdge + (i*dimTable[1]/(sideMarks+1))*ppi),
+  			           markRadius, markRadius);        	
+        }
+        
+        for (Ball b: balls) 
+        {// draw a circle outline for each ball 
             g.setColor(edge);
             g.drawOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
                     (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
@@ -115,14 +134,10 @@ public class CaromTable extends JPanel
             g.setColor(b.getColor());
             g.fillOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
                     (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
-                    (int)(2*radius*ppi), (int)(2*radius*ppi));
-          
-        }
-    
-    }
+                    (int)(2*radius*ppi), (int)(2*radius*ppi));          
+        }    
+    }//paintComponent
 
-
-      
 
     public int getPixelsPerInch() 
     {
@@ -135,7 +150,8 @@ public class CaromTable extends JPanel
             throw new IllegalArgumentException("Pixels per inch must be positive.");
         this.ppi = pixelsPerInch;
     }
-    //Get Table Dimesnions
+    
+    //Get Table Dimensions
     public double getTableWidth()
     {
     	return dimTable[0];
@@ -162,6 +178,3 @@ public class CaromTable extends JPanel
     	repaint();
     }
 }
-
-
-

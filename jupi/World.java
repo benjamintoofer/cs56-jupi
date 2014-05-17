@@ -36,24 +36,27 @@ public class World extends JApplet
     	// prevent more than one world from being constructed:
     	if (world != null)
     		throw new RuntimeException();
-        int pixelsPerInch = 8;
+        int pixelsPerInch = BilliardsConstants.PIXELS_PER_INCH;
         final CaromTable table = new CaromTable();
         table.setPixelsPerInch(pixelsPerInch);
-
         this.add(table);
-
         
         //Game Thread
-        Thread gameThread = new Thread(new Runnable(){
+        Thread gameThread = new Thread(new Runnable()
+        {
         	public void run()
         	{
-        		try{
+        		try
+        		{
         			while(true)
         			{
-        				table.update();
-        				Thread.sleep(30);
+        				table.update();        				
+        				Thread.sleep(BilliardsConstants.TIME_SLICE);
         			}
-        		}catch(InterruptedException ex ){}
+        		}
+        		catch(InterruptedException ex )
+        		{        			
+        		}
         	}
         });
         gameThread.start();

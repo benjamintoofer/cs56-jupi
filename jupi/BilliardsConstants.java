@@ -10,10 +10,7 @@ import java.awt.*;
 public interface BilliardsConstants 
 {
 	int PIXELS_PER_INCH= 8;
-	
-
-    int INCHES_PER_FOOT = 12;
-    
+    int INCHES_PER_FOOT = 12;    
 
     /**
      * {@code double} array containing the width and height, in inches, of the region which can contain balls.

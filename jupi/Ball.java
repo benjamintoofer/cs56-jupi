@@ -7,10 +7,8 @@ import javax.swing.*;
  * Class defining a billiards ball.
  */
 
-
 public class Ball 
 {
-
     private Color color;
     private VectorDouble position, velocity;
     private double mass, radius;
@@ -31,7 +29,6 @@ public class Ball
         this.radius = radius;
         this.mass   = mass;
         color       = c;
-
     }
 
     public Ball(double x, double y, Color c) 
@@ -106,12 +103,9 @@ public class Ball
     
     //Update balls properties
     public void update()
-    {
-    	
+    {    	
     	position.x += velocity.x;
-    	position.y += velocity.y;
-    	
-    }
-  
+    	position.y += velocity.y;    	
+    }  
 
 }//Ball
