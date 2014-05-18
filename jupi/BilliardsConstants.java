@@ -51,7 +51,7 @@ public interface BilliardsConstants
     /**
      * Simulated time, in milliseconds, between updating the world state.
      */
-    int TIME_SLICE = 5;
+    int TIME_SLICE = 30;
 
     /**
      * The number by which ball speeds are multiplied every timeslice to yield speed on next timeslice.

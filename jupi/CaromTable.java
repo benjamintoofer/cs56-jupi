@@ -42,9 +42,9 @@ public class CaromTable extends JPanel
         balls.add(redball);
         balls.add(yellowball);
         
-        whiteball.setVelocity(.2,.1);
-        redball.setVelocity(.13,.3);
-        yellowball.setVelocity(.23,.25);
+        whiteball.setVelocity(.5,.7);
+        redball.setVelocity(.3,.6);
+        yellowball.setVelocity(.3,.5);
         
         felt   = BilliardsConstants.FELT;
         border = BilliardsConstants.BORDER;
@@ -169,10 +169,15 @@ public class CaromTable extends JPanel
 
     public void update()
     {
-    	for(Ball b:balls)
+    	for(int i = 0; i < balls.size(); i++)
     	{
-    		Physics.checkCusionCollision(b, this);
-    		b.update();
+    		Physics.checkCusionCollision(balls.get(i), this);
+    		
+    		for(int j = i + 1; j < balls.size(); j++)
+    		{
+    			Physics.checkBallCollision(balls.get(i), balls.get(j));
+    		}
+    		balls.get(i).update();
     	}
     	
     	repaint();

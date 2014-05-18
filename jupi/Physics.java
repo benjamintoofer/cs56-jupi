@@ -47,6 +47,72 @@ public class Physics
 		}	
 		
 	}//checkCusionCollision
+	public static void checkBallCollision(Ball ball1, Ball ball2)
+	{
+		//Check if balls collide
+		double dx = ball2.getPosition().x - ball1.getPosition().x;
+		double dy = ball2.getPosition().y - ball1.getPosition().y;
+		double distance = Math.sqrt(dx*dx + dy*dy);
+		double radiusDistance = ball1.getRadius() + ball2.getRadius();
+		
+		if(distance < radiusDistance)
+		{
+			double angle = Math.atan2(dy, dx);
+			double sin = Math.sin(angle);
+			double cos = Math.cos(angle);
+			
+			//Rotate ball1 and ball2 position
+			VectorDouble pos1 = new VectorDouble(0,0);
+			VectorDouble pos2 = rotate(dx,dy,sin,cos,true);
+			
+			//Rotate ball1 and ball2 velocity
+			VectorDouble vel1 = rotate(ball1.getVelocity().x,ball1.getVelocity().y,sin,cos,true);
+			VectorDouble vel2 = rotate(ball2.getVelocity().x,ball2.getVelocity().y,sin,cos,true);
+			
+			//Collision reaction
+			double vxTotal = vel1.x - vel2.x;
+			vel1.x = ((ball1.getMass() - ball2.getMass()) * vel1.x + 2 * ball2.getMass() * vel2.x)/(ball1.getMass() + ball2.getMass());
+			vel2.x = vxTotal + vel1.x;
+			
+			//Update Position
+			pos1.x += vel1.x;
+			pos2.x += vel2.x;
+			
+			//Rotate back
+			VectorDouble finalPos1 = rotate(pos1.x,pos1.y,sin,cos,false);
+			VectorDouble finalPos2 = rotate(pos2.x,pos2.y,sin,cos,false);
+			
+			//Adjust positions
+			ball2.setPosition((ball1.getPosition().x+finalPos2.x), (ball1.getPosition().y+finalPos2.y));
+			ball1.setPosition((ball1.getPosition().x+finalPos1.x),(ball1.getPosition().y+finalPos1.y));
+			
+			//Rotate velocities back
+			VectorDouble finalVel1 = rotate(vel1.x,vel1.y,sin,cos,false);
+			VectorDouble finalVel2 = rotate(vel2.x,vel2.y,sin,cos,false);
+			
+			//Adjust Velocities
+			ball1.setVelocity(finalVel1);
+			ball2.setVelocity(finalVel2);
+			
+			//System.out.println("Collided");
+		}
+	}//checkBallCollision
+	private static VectorDouble rotate(double x,double y,double sin, double cos, boolean reverse)
+	{
+		VectorDouble result = new VectorDouble();
+		
+		if(reverse)
+		{
+			result.x = x * cos + y * sin;
+			result.y = y * cos - x * sin;
+		}else
+		{
+			result.x = x * cos - y * sin;
+			result.y = y * cos + x * sin;
+		}
+		
+		return result;
+	}//rotate
 	
 }//Physics
 
