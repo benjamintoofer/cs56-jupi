@@ -97,7 +97,7 @@ public class Physics
 			//System.out.println("Collided");
 		}
 	}//checkBallCollision
-	private static VectorDouble rotate(double x,double y,double sin, double cos, boolean reverse)
+	public static VectorDouble rotate(double x,double y,double sin, double cos, boolean reverse)
 	{
 		VectorDouble result = new VectorDouble();
 		

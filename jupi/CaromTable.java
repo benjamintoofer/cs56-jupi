@@ -1,6 +1,8 @@
 package jupi;
 import javax.swing.*;
+
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 /**
@@ -13,8 +15,10 @@ public class CaromTable extends JPanel
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass;
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
+    private Cue cueStick;
     private ArrayList<Ball> balls = new ArrayList<>();
     private Color felt, border, floor, edge, mark;
+    int i = 0;
 
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -33,7 +37,8 @@ public class CaromTable extends JPanel
         dimCushion = new double[]{dimTable[0]   + 2*cushionWidth, dimTable[1]   + 2*cushionWidth};
         dimBorder  = new double[]{dimCushion[0] + 2*borderWidth , dimCushion[1] + 2*borderWidth};
         dimFloor   = new double[]{dimBorder[0]  + 2*floorWidth  , dimBorder[1]  + 2*floorWidth};
-
+        
+        cueStick = new Cue(300,200,60);
         whiteball  = new Ball(dimTable[0] / 3 , dimTable[1] /2  ,radius,mass, BilliardsConstants.WHITE);
         redball    = new Ball(dimTable[0] *2/3, dimTable[1] *2/5,radius,mass, BilliardsConstants.RED);
         yellowball = new Ball(dimTable[0] *2/3, dimTable[1] *3/5,radius,mass, BilliardsConstants.YELLOW);
@@ -42,7 +47,7 @@ public class CaromTable extends JPanel
         balls.add(redball);
         balls.add(yellowball);
         
-        whiteball.setVelocity(.5,.7);
+        whiteball.setVelocity(0,0);
         redball.setVelocity(.3,.6);
         yellowball.setVelocity(.3,.5);
         
@@ -135,7 +140,34 @@ public class CaromTable extends JPanel
             g.fillOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
                     (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));          
-        }    
+        }
+        
+        /*
+         * Drawing cue stick
+         */
+        int[] cuesX = new int[]{(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x -  BilliardsConstants.CUE_DIAMETER*.5 )*ppi),
+        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x + BilliardsConstants.CUE_DIAMETER*.5 )*ppi),
+        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x +  BilliardsConstants.CUE_DIAMETER )*ppi),
+        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x -  BilliardsConstants.CUE_DIAMETER*.5 )*ppi)};
+        int[]cuesY = new int[]{(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
+        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
+        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5 + BilliardsConstants.CUE_LENGTH)*ppi),
+        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5 + BilliardsConstants.CUE_LENGTH)*ppi)};
+        
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(i++),(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.transform(transform);
+		g2d.setColor(Color.BLUE);
+		g2d.fillArc((int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 )*ppi) , 
+				   (int)((floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + 5)*ppi),
+				   (int)(BilliardsConstants.CUE_DIAMETER*ppi) ,(int)(BilliardsConstants.CUE_DIAMETER*ppi) ,0 ,180);
+		
+		g2d.setColor(new Color(0xDBB84D));
+		g2d.fillPolygon(cuesX, cuesY, 4);
+		
+        
+        
     }//paintComponent
 
 

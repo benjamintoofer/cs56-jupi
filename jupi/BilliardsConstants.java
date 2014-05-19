@@ -36,7 +36,16 @@ public interface BilliardsConstants
      * Width, in inches, of the empty space surrounding the table and cushions.
      */
     double FLOOR_WIDTH = 12;
-
+    
+    /**
+     * Length, in inches, of the cue stick.
+     */
+    double CUE_LENGTH = 50;
+    
+    /**
+     * Diameter, in inches, of the cue stick.
+     */
+    double CUE_DIAMETER = .7;
     /**
      * Ball diameter, in inches.
      */
