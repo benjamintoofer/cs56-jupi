@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class CaromTable extends JPanel 
 {
     private double[] dimTable, dimCushion, dimBorder, dimFloor;
-    private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass;
+    private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength;
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
     private Cue cueStick;
@@ -28,12 +29,14 @@ public class CaromTable extends JPanel
 
     public CaromTable() 
     {
-        borderCorner = BilliardsConstants.BORDER_CORNER;
-        borderWidth  = BilliardsConstants.BORDER_WIDTH;
-        cushionWidth = BilliardsConstants.CUSHION_WIDTH;
-        floorWidth   = BilliardsConstants.FLOOR_WIDTH;
-        radius       = BilliardsConstants.BALL_DIAMETER / 2;
-        mass		 = BilliardsConstants.BALL_MASS;
+        borderCorner   = BilliardsConstants.BORDER_CORNER;
+        borderWidth    = BilliardsConstants.BORDER_WIDTH;
+        cushionWidth   = BilliardsConstants.CUSHION_WIDTH;
+        floorWidth     = BilliardsConstants.FLOOR_WIDTH;
+        radius         = BilliardsConstants.BALL_DIAMETER / 2;
+        mass		   = BilliardsConstants.BALL_MASS;
+        gap			   = BilliardsConstants.GAP;
+        cueStickLength = BilliardsConstants.CUE_LENGTH;
 
         dimTable = BilliardsConstants.TABLE_DIMENSION;
         dimCushion = new double[]{dimTable[0]   + 2*cushionWidth, dimTable[1]   + 2*cushionWidth};
@@ -49,6 +52,13 @@ public class CaromTable extends JPanel
         balls.add(redball);
         balls.add(yellowball);
         
+        /*
+         * temp position of cue
+         * Need to change it to the beginning of every turn
+         */
+        cueStick.setPosition((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
+				(floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + 5));
+        
         whiteball.setVelocity(0,0);
         redball.setVelocity(.3,.6);
         yellowball.setVelocity(.3,.5);
@@ -59,6 +69,31 @@ public class CaromTable extends JPanel
         edge   = BilliardsConstants.EDGE;
         mark   = BilliardsConstants.MARK;
         
+        this.addMouseListener(new MouseListener()
+        {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				cueStick.setPosition(cueStick.getX(), 0);
+				System.out.println(cueStick.getY());
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+        	
+        });
         this.addMouseMotionListener(new MouseMotionListener()
         {
         	public void mouseMoved(MouseEvent e)
@@ -67,7 +102,8 @@ public class CaromTable extends JPanel
         		mouseY = e.getY();
         	}
         	public void mouseDragged(MouseEvent e) {}
-        });
+        });//MouseMotionListener
+        
     }//CaromTable 
 
 
@@ -157,29 +193,32 @@ public class CaromTable extends JPanel
         /*
          * Drawing cue stick
          */
-        cueStick.setPosition(((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 )*ppi) ,
-        					((floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + 5)*ppi));
+        
         double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().x) * ppi);
         double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().y) * ppi);
         
         double angle = Math.atan2(dy, dx) - Math.toRadians(90);
         
-        int[] cuesX = new int[]{(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x -  BilliardsConstants.CUE_DIAMETER*.5 )*ppi),
-        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x + BilliardsConstants.CUE_DIAMETER*.5 )*ppi),
-        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x +  BilliardsConstants.CUE_DIAMETER )*ppi),
-        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x -  BilliardsConstants.CUE_DIAMETER*.5 )*ppi)};
-        int[]cuesY = new int[]{(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
-        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
-        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5 + BilliardsConstants.CUE_LENGTH)*ppi),
-        					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5 + BilliardsConstants.CUE_LENGTH)*ppi)};
+        cueStick.setPosition((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
+				(floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + gap));
+        
+        
+        int[] cuesX = new int[]{(int)(cueStick.getX()*ppi),
+        					(int)((cueStick.getX() + BilliardsConstants.CUE_DIAMETER )*ppi),
+        					(int)((cueStick.getX() +  1.5*BilliardsConstants.CUE_DIAMETER )*ppi),
+        					(int)((cueStick.getX() -  BilliardsConstants.CUE_DIAMETER*.5 )*ppi)};
+        int[]cuesY = new int[]{(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
+        					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
+        					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi),
+        					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi)};
         
         AffineTransform transform = new AffineTransform();
         transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
         Graphics2D g2d = (Graphics2D)g;
         g2d.transform(transform);
 		g2d.setColor(Color.BLUE);
-		g2d.fillArc((int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 )*ppi) , 
-				   (int)((floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + 5)*ppi),
+		g2d.fillArc((int)(cueStick.getX()*ppi) , 
+				   (int)(cueStick.getY()*ppi),
 				   (int)(BilliardsConstants.CUE_DIAMETER*ppi) ,(int)(BilliardsConstants.CUE_DIAMETER*ppi) ,0 ,180);
 		
 		g2d.setColor(new Color(0xDBB84D));
@@ -220,6 +259,7 @@ public class CaromTable extends JPanel
 
     public void update()
     {
+    	//cueStick.setPosition(cueStick.getX(), cueStick.getY() + 1);System.out.println(cueStick.getY());
     	for(int i = 0; i < balls.size(); i++)
     	{
     		Physics.checkCusionCollision(balls.get(i), this);

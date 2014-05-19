@@ -46,6 +46,11 @@ public interface BilliardsConstants
      * Diameter, in inches, of the cue stick.
      */
     double CUE_DIAMETER = .7;
+    
+    /**
+     * Gap, in inches, of the cue stick from the ball.
+     */
+    double GAP = 5;
     /**
      * Ball diameter, in inches.
      */
