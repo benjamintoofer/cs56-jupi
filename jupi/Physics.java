@@ -99,8 +99,8 @@ public class Physics
 	}//checkBallCollision
 	public static void hitBall(Cue cue, Ball ball)
 	{
-		double newXVel = cue.getPower() * Math.cos(cue.getAngle() - Math.toRadians(90));
-		double newYVel = cue.getPower() * Math.sin(cue.getAngle() - Math.toRadians(90));
+		double newXVel = (cue.getPower()*.5) * Math.cos(cue.getAngle() - Math.toRadians(90));
+		double newYVel = (cue.getPower()*.5) * Math.sin(cue.getAngle() - Math.toRadians(90));
 		//System.out.println(newXVel+"  "+newYVel+"  "+cue.getAngle()*(180/Math.PI));
 		ball.setVelocity(newXVel, newYVel);
 	}
