@@ -2,6 +2,8 @@ package jupi;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
@@ -18,7 +20,7 @@ public class CaromTable extends JPanel
     private Cue cueStick;
     private ArrayList<Ball> balls = new ArrayList<>();
     private Color felt, border, floor, edge, mark;
-    int i = 0;
+    int mouseX,mouseY;
 
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -38,7 +40,7 @@ public class CaromTable extends JPanel
         dimBorder  = new double[]{dimCushion[0] + 2*borderWidth , dimCushion[1] + 2*borderWidth};
         dimFloor   = new double[]{dimBorder[0]  + 2*floorWidth  , dimBorder[1]  + 2*floorWidth};
         
-        cueStick = new Cue(300,200,60);
+        cueStick = new Cue();
         whiteball  = new Ball(dimTable[0] / 3 , dimTable[1] /2  ,radius,mass, BilliardsConstants.WHITE);
         redball    = new Ball(dimTable[0] *2/3, dimTable[1] *2/5,radius,mass, BilliardsConstants.RED);
         yellowball = new Ball(dimTable[0] *2/3, dimTable[1] *3/5,radius,mass, BilliardsConstants.YELLOW);
@@ -56,6 +58,16 @@ public class CaromTable extends JPanel
         floor  = BilliardsConstants.FLOOR;
         edge   = BilliardsConstants.EDGE;
         mark   = BilliardsConstants.MARK;
+        
+        this.addMouseMotionListener(new MouseMotionListener()
+        {
+        	public void mouseMoved(MouseEvent e)
+        	{
+        		mouseX = e.getX();
+        		mouseY = e.getY();
+        	}
+        	public void mouseDragged(MouseEvent e) {}
+        });
     }//CaromTable 
 
 
@@ -145,6 +157,13 @@ public class CaromTable extends JPanel
         /*
          * Drawing cue stick
          */
+        cueStick.setPosition(((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 )*ppi) ,
+        					((floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + 5)*ppi));
+        double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().x) * ppi);
+        double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().y) * ppi);
+        
+        double angle = Math.atan2(dy, dx) - Math.toRadians(90);
+        
         int[] cuesX = new int[]{(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x -  BilliardsConstants.CUE_DIAMETER*.5 )*ppi),
         					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x + BilliardsConstants.CUE_DIAMETER*.5 )*ppi),
         					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x +  BilliardsConstants.CUE_DIAMETER )*ppi),
@@ -155,7 +174,7 @@ public class CaromTable extends JPanel
         					(int)((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y - radius+ 5 + BilliardsConstants.CUE_DIAMETER*.5 + BilliardsConstants.CUE_LENGTH)*ppi)};
         
         AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(i++),(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
+        transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
         Graphics2D g2d = (Graphics2D)g;
         g2d.transform(transform);
 		g2d.setColor(Color.BLUE);

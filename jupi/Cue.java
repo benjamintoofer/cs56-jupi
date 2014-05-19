@@ -39,13 +39,5 @@ public class Cue {
 	{
 		return power;
 	}
-	public void draw(Graphics g,Ball ball)
-	{
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.rotate(Math.toRadians(30));
-		g.setColor(Color.BLUE);
-		g.fillArc((int)ball.getPosition().x * BilliardsConstants.PIXELS_PER_INCH, (int)ball.getPosition().y* BilliardsConstants.PIXELS_PER_INCH, 20 ,10 ,0 ,180);
-		
-		
-	}
+	
 }
