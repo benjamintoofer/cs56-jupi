@@ -15,13 +15,14 @@ import java.util.ArrayList;
 public class CaromTable extends JPanel 
 {
     private double[] dimTable, dimCushion, dimBorder, dimFloor;
-    private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength;
+    private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
     private Cue cueStick;
     private ArrayList<Ball> balls = new ArrayList<>();
     private Color felt, border, floor, edge, mark;
     int mouseX,mouseY;
+    boolean mouseDown;
 
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -37,6 +38,8 @@ public class CaromTable extends JPanel
         mass		   = BilliardsConstants.BALL_MASS;
         gap			   = BilliardsConstants.GAP;
         cueStickLength = BilliardsConstants.CUE_LENGTH;
+        pullDistance = 0;
+        mouseDown = false;
 
         dimTable = BilliardsConstants.TABLE_DIMENSION;
         dimCushion = new double[]{dimTable[0]   + 2*cushionWidth, dimTable[1]   + 2*cushionWidth};
@@ -77,13 +80,12 @@ public class CaromTable extends JPanel
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cueStick.setPosition(cueStick.getX(), 0);
-				System.out.println(cueStick.getY());
+				mouseDown = true;
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
+				mouseDown = false;
 				
 			}
 
@@ -198,9 +200,10 @@ public class CaromTable extends JPanel
         double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().y) * ppi);
         
         double angle = Math.atan2(dy, dx) - Math.toRadians(90);
+        cueStick.setAngle(angle);
         
-        cueStick.setPosition((floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
-				(floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + gap));
+        cueStick.setPosition(( floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
+				(pullDistance + floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + gap));
         
         
         int[] cuesX = new int[]{(int)(cueStick.getX()*ppi),
@@ -259,9 +262,27 @@ public class CaromTable extends JPanel
 
     public void update()
     {
-    	//cueStick.setPosition(cueStick.getX(), cueStick.getY() + 1);System.out.println(cueStick.getY());
+    	
+    	
     	for(int i = 0; i < balls.size(); i++)
     	{
+    		
+    		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL)
+    		{
+    			pullDistance += BilliardsConstants.PULL_RATE;
+    			cueStick.setPower(pullDistance);
+    			
+    		}else if(!mouseDown && pullDistance > 0)
+    		{
+    			pullDistance -= 1; 
+    		}
+    		if(pullDistance < 0)
+    		{
+    			Physics.hitBall(cueStick,whiteball);
+    			pullDistance = 0;
+    			System.out.println("hit");
+    		}
+    		System.out.println(whiteball.getVelocity().x+ "  "+whiteball.getVelocity().y );
     		Physics.checkCusionCollision(balls.get(i), this);
     		
     		for(int j = i + 1; j < balls.size(); j++)

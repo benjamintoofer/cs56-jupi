@@ -86,8 +86,9 @@ public class Ball
     		this.setVelocity((this.getVelocity().getX()*-1), this.getVelocity().getY());
     	}
     	if(y)
-    	{    	
+    	{    //System.out.println("Before "+this.getVelocity().x+"  "+this.getVelocity().y);	
     		this.setVelocity((this.getVelocity().getX()), (this.getVelocity().getY() * -1));
+    		//System.out.println("After"+this.getVelocity().x+"  "+this.getVelocity().y);	
     	}
     }
           
@@ -103,7 +104,17 @@ public class Ball
     
     //Update balls properties
     public void update()
-    {    	
+    {    
+    	velocity.x *= BilliardsConstants.ROLLING_FRICTION;
+    	velocity.y *= BilliardsConstants.ROLLING_FRICTION;
+    	if(Math.abs(velocity.x) < BilliardsConstants.MINIMUM_SPEED)
+    	{
+    		velocity.x = 0;
+    	}
+    	if(Math.abs(velocity.y) < BilliardsConstants.MINIMUM_SPEED)
+    	{
+    		velocity.y = 0;
+    	}
     	position.x += velocity.x;
     	position.y += velocity.y;    	
     }  

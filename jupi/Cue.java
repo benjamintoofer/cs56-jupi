@@ -8,6 +8,7 @@ public class Cue {
 	
 	private VectorDouble tipPosition;
 	private double power;
+	private double angle;
 	
 	public Cue()
 	{
@@ -39,5 +40,16 @@ public class Cue {
 	{
 		return power;
 	}
-	
+	public void setAngle(double angle)
+	{
+		this.angle = angle;
+	}
+	public double getAngle()
+	{
+		return angle;
+	}
+	public void setPower(double power)
+	{
+		this.power = power;
+	}
 }

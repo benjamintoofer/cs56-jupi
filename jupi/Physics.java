@@ -34,7 +34,7 @@ public class Physics
 
 		//Collision with bottom wall
 		if(yPos + radius > bottomCushion && (ball.getVelocity().y > 0))
-		{
+		{	
 			ball.setPosition(xPos, bottomCushion - radius);
 			ball.reflect(false, true);
 		}
@@ -97,6 +97,13 @@ public class Physics
 			//System.out.println("Collided");
 		}
 	}//checkBallCollision
+	public static void hitBall(Cue cue, Ball ball)
+	{
+		double newXVel = cue.getPower() * Math.cos(cue.getAngle() - Math.toRadians(90));
+		double newYVel = cue.getPower() * Math.sin(cue.getAngle() - Math.toRadians(90));
+		//System.out.println(newXVel+"  "+newYVel+"  "+cue.getAngle()*(180/Math.PI));
+		ball.setVelocity(newXVel, newYVel);
+	}
 	public static VectorDouble rotate(double x,double y,double sin, double cos, boolean reverse)
 	{
 		VectorDouble result = new VectorDouble();

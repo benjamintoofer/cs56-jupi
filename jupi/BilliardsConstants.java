@@ -121,4 +121,14 @@ public interface BilliardsConstants
      * Default color for rendering table markings.
      */
     Color MARK = Color.white;
+    
+    /**
+     * Rate of cue stick pull
+     */
+    double PULL_RATE = .1;
+    
+    /**
+     * Maximum distance of pull
+     */
+    double MAX_PULL = 10;
 }
