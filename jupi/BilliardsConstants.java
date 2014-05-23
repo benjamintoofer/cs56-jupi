@@ -71,13 +71,13 @@ public interface BilliardsConstants
      * The number by which ball speeds are multiplied every timeslice to yield speed on next timeslice.
      * Should be within the interval [0, 1).
      */
-    double ROLLING_FRICTION = 0.98;
+    double ROLLING_FRICTION = 0.985;
 
     /**
      * The speed below which a ball will be stopped on the next timeslice. Units?
      * Should be > 0.
      */
-    double MINIMUM_SPEED = 0.01;
+    double MINIMUM_SPEED = 0.02;
 
     /**
      * Default colors of the table felt, including both play area and cushions.
