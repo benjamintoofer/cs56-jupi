@@ -1,5 +1,6 @@
 package jupi;
 import java.awt.*;
+
 import javax.swing.*;
 
 
@@ -75,8 +76,12 @@ public class Physics
 			vel2.x = vxTotal + vel1.x;
 			
 			//Update Position
-			pos1.x += vel1.x;
-			pos2.x += vel2.x;
+				//Prevent overlap
+			double absV = Math.abs(vel1.x) + Math.abs(vel2.x);
+			double overlap = (ball1.getRadius() + ball2.getRadius() - Math.abs(pos1.x - pos2.x));
+			
+			pos1.x += vel1.x/absV * overlap;
+			pos2.x += vel2.x/absV * overlap;
 			
 			//Rotate back
 			VectorDouble finalPos1 = rotate(pos1.x,pos1.y,sin,cos,false);
@@ -120,6 +125,14 @@ public class Physics
 		
 		return result;
 	}//rotate
+	public static double checkPath(VectorDouble start,double dx,double dy)
+	{
+		double rightCushion  = BilliardsConstants.TABLE_DIMENSION[0];
+		double leftCushion   = 0, 
+			   topCushion    = 0;
+		double bottomCushion = BilliardsConstants.TABLE_DIMENSION[1];
+		
+	}
 	
 }//Physics
 

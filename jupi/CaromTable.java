@@ -18,6 +18,7 @@ public class CaromTable extends JPanel
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
+    private BallPath path;
     private Cue cueStick;
     private ArrayList<Ball> balls = new ArrayList<>();
     private Color felt, border, floor, edge, mark;
@@ -51,6 +52,7 @@ public class CaromTable extends JPanel
         whiteball  = new Ball(dimTable[0] / 3 , dimTable[1] /2  ,radius,mass, BilliardsConstants.WHITE);
         redball    = new Ball(dimTable[0] *2/3, dimTable[1] *2/5,radius,mass, BilliardsConstants.RED);
         yellowball = new Ball(dimTable[0] *2/3, dimTable[1] *3/5,radius,mass, BilliardsConstants.YELLOW);
+        path = new BallPath(whiteball.getPosition(),0,60);
         
         balls.add(whiteball);
         balls.add(redball);
@@ -59,8 +61,8 @@ public class CaromTable extends JPanel
      
         
         whiteball.setVelocity(0,0);
-        redball.setVelocity(.3,.6);
-        yellowball.setVelocity(.3,.5);
+        redball.setVelocity(0,0);
+        yellowball.setVelocity(0,0);
         
         felt   = BilliardsConstants.FELT;
         border = BilliardsConstants.BORDER;
@@ -212,7 +214,11 @@ public class CaromTable extends JPanel
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi),
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi)};
-        
+        	///
+        	 path.updateProp(whiteball.getPosition(), angle);
+        	 path.draw(g,cushionWidth,floorWidth,borderWidth);
+        	///
+             
         	AffineTransform transform = new AffineTransform();
         	transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
         	Graphics2D g2d = (Graphics2D)g;
@@ -225,6 +231,7 @@ public class CaromTable extends JPanel
 			g2d.setColor(new Color(0xDBB84D));
 			g2d.fillPolygon(cuesX, cuesY, 4);
         }
+       
 		
         
         
