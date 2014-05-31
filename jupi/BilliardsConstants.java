@@ -9,7 +9,8 @@ import java.awt.*;
 
 public interface BilliardsConstants 
 {
-	int PIXELS_PER_INCH= 8;
+	//int PIXELS_PER_INCH= 8;
+	int PIXELS_PER_INCH= 9;
     int INCHES_PER_FOOT = 12;    
 
     /**
@@ -54,7 +55,9 @@ public interface BilliardsConstants
     /**
      * Ball diameter, in inches.
      */
-    double BALL_DIAMETER = 2.375;
+    //double BALL_DIAMETER = 2.375;
+    //double BALL_DIAMETER = 2.7;
+    double BALL_DIAMETER = 2.6;
     
     /**
      * Ball Mass, in grams.
@@ -65,13 +68,15 @@ public interface BilliardsConstants
     /**
      * Simulated time, in milliseconds, between updating the world state.
      */
-    int TIME_SLICE = 30;
+    //int TIME_SLICE = 30;
+    int TIME_SLICE = 15;
 
     /**
      * The number by which ball speeds are multiplied every timeslice to yield speed on next timeslice.
      * Should be within the interval [0, 1).
      */
-    double ROLLING_FRICTION = 0.985;
+    //double ROLLING_FRICTION = 0.985;
+    double ROLLING_FRICTION = 0.99;
 
     /**
      * The speed below which a ball will be stopped on the next timeslice. Units?

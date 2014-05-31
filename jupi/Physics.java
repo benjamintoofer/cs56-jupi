@@ -56,7 +56,7 @@ public class Physics
 		double distance = Math.sqrt(dx*dx + dy*dy);
 		double radiusDistance = ball1.getRadius() + ball2.getRadius();
 		
-		if(distance < radiusDistance)
+		if(distance <= radiusDistance)
 		{
 			double angle = Math.atan2(dy, dx);
 			double sin = Math.sin(angle);
@@ -104,8 +104,9 @@ public class Physics
 	}//checkBallCollision
 	public static void hitBall(Cue cue, Ball ball)
 	{
-		double newXVel = (cue.getPower()*.5) * Math.cos(cue.getAngle() - Math.toRadians(90));
-		double newYVel = (cue.getPower()*.5) * Math.sin(cue.getAngle() - Math.toRadians(90));
+		double powerMulti = 0.35;
+		double newXVel = (cue.getPower()*powerMulti) * Math.cos(cue.getAngle() - Math.toRadians(90));
+		double newYVel = (cue.getPower()*powerMulti) * Math.sin(cue.getAngle() - Math.toRadians(90));
 		//System.out.println(newXVel+"  "+newYVel+"  "+cue.getAngle()*(180/Math.PI));
 		ball.setVelocity(newXVel, newYVel);
 	}
@@ -131,6 +132,7 @@ public class Physics
 		double leftCushion   = 0, 
 			   topCushion    = 0;
 		double bottomCushion = BilliardsConstants.TABLE_DIMENSION[1];
+		return 1.0;
 		
 	}
 	
