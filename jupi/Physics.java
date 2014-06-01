@@ -126,15 +126,42 @@ public class Physics
 		
 		return result;
 	}//rotate
-	public static double checkPath(VectorDouble start,double dx,double dy)
+	public static double checkXPath(double x)
 	{
 		double rightCushion  = BilliardsConstants.TABLE_DIMENSION[0];
-		double leftCushion   = 0, 
-			   topCushion    = 0;
-		double bottomCushion = BilliardsConstants.TABLE_DIMENSION[1];
-		return 1.0;
+		double leftCushion   = 0;
+		
+		
+		if(x > rightCushion)
+		{
+			
+			return 2*(rightCushion - x);
+		}else if(x < leftCushion)
+		{
+			return 2*(leftCushion - x); 
+		}else{
+			return 0;
+		}
 		
 	}
-	
+	public static double checkYPath(double y)
+	{
+		
+		double topCushion    = 0;
+		double bottomCushion = BilliardsConstants.TABLE_DIMENSION[1];
+		
+		
+		if(y > bottomCushion)
+		{
+			
+			return 2*(bottomCushion - y);
+		}else if(y < topCushion)
+		{
+			return 2*(topCushion - y); 
+		}else{
+			return 0;
+		}
+		
+	}
 }//Physics
 

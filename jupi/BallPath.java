@@ -36,15 +36,29 @@ public class BallPath {
 		
 		
 		g.setColor(Color.RED);
-		//firstPath = Physics.checkPath(startPoint, dx, dy);
-		//secondPath = distance - firstPath;
 		
-		//System.out.println(firstPath);
+		
 		this.dx = -distance * Math.cos(angle + Math.toRadians(90));
 		this.dy = -distance * Math.sin(angle + Math.toRadians(90));
+		for(int i = 0; i < distance; i++)
+		{
+			
+			double y =  (dy * i/18);
+			double x =  (dx * i/18);
+			double overlapX = Physics.checkXPath((startPoint.x + x));
+			double overlapY = Physics.checkYPath((startPoint.y + y));
+			
+			//x = (dx * i/18);
+			//y = (dy * i/18);
+			
+			g.fillOval((int)((startPoint.x + totalWidth+ x + overlapX)*ppi) - 4,(int)((startPoint.y +totalWidth+ y + overlapY)*ppi) - 4, 8, 8);
+		}
+		
+		//System.out.println(firstPath);
+		
 		//endPoint.x = startPoint.x + dx;
 		//endPoint.y = startPoint.y + dy;
-		g.drawLine((int)((startPoint.x + totalWidth)*ppi ), (int)((startPoint.y + totalWidth)* ppi), (int)((startPoint.x + totalWidth+ dx)*ppi),(int)((startPoint.y +totalWidth+ dy)*ppi));
+		//g.drawLine((int)((startPoint.x + totalWidth)*ppi ), (int)((startPoint.y + totalWidth)* ppi), (int)((startPoint.x + totalWidth+ dx)*ppi),(int)((startPoint.y +totalWidth+ dy)*ppi));
 		
 		//this.dx = -secondPath * Math.cos(-angle + Math.toRadians(90));
 		//this.dy = -secondPath * Math.sin(-angle + Math.toRadians(90));

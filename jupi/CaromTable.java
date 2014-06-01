@@ -52,7 +52,7 @@ public class CaromTable extends JPanel
         whiteball  = new Ball(dimTable[0] / 3 , dimTable[1] /2  ,radius,mass, BilliardsConstants.WHITE);
         redball    = new Ball(dimTable[0] *2/3, dimTable[1] *2/5,radius,mass, BilliardsConstants.RED);
         yellowball = new Ball(dimTable[0] *2/3, dimTable[1] *3/5,radius,mass, BilliardsConstants.YELLOW);
-        path = new BallPath(whiteball.getPosition(),0,60);
+        path = new BallPath(whiteball.getPosition(),0,30);
         
         balls.add(whiteball);
         balls.add(redball);
