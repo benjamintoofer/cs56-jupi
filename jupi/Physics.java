@@ -21,28 +21,28 @@ public class Physics
 		
 		
 		//Collision with left wall
-		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0) && yPos > topCushion + pocketGap && yPos < bottomCushion - pocketGap)
+		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0))
 		{
 			ball.setPosition(radius, yPos);
 			ball.reflect(true, false);			
 		}
 		
 		//Collision with right wall
-		if(xPos + radius > rightCushion && (ball.getVelocity().x > 0) && yPos > topCushion + pocketGap && yPos < bottomCushion - pocketGap)
+		if(xPos + radius > rightCushion && (ball.getVelocity().x > 0))
 		{
 			ball.setPosition(rightCushion - radius, yPos);
 			ball.reflect(true, false);
 		}
 
 		//Collision with bottom wall
-		if(yPos + radius > bottomCushion && (ball.getVelocity().y > 0) && xPos > leftCushion + pocketGap && xPos < rightCushion - pocketGap)
+		if(yPos + radius > bottomCushion && (ball.getVelocity().y > 0))
 		{	
 			ball.setPosition(xPos, bottomCushion - radius);
 			ball.reflect(false, true);
 		}
 		
 		//Collision with top wall
-		if(yPos - radius < topCushion && ball.getVelocity().y < 0 && xPos > leftCushion + pocketGap && xPos < rightCushion - pocketGap)
+		if(yPos - radius < topCushion && ball.getVelocity().y < 0 )
 		{
 			ball.setPosition(xPos,radius);
 			ball.reflect(false, true);
