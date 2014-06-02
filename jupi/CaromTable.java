@@ -18,13 +18,15 @@ public class CaromTable extends JPanel
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
+    private Ball currentBall; // current ball being played, can be white or yellow
+    boolean isWhitePlayer; //determines player's turn - True: white, False: Yellow
     private BallPath path;
     private Cue cueStick;
     private ArrayList<Ball> balls = new ArrayList<>();
     private Color felt, border, floor, edge, mark;
     int mouseX,mouseY;
     boolean mouseDown,showCue;
-
+    
     /**
      * Default constructor draws all field values from BilliardConstants
      */
@@ -52,7 +54,11 @@ public class CaromTable extends JPanel
         whiteball  = new Ball(dimTable[0] / 3 , dimTable[1] /2  ,radius,mass, BilliardsConstants.WHITE);
         redball    = new Ball(dimTable[0] *2/3, dimTable[1] *2/5,radius,mass, BilliardsConstants.RED);
         yellowball = new Ball(dimTable[0] *2/3, dimTable[1] *3/5,radius,mass, BilliardsConstants.YELLOW);
-        path = new BallPath(whiteball.getPosition(),0,30);
+        
+        currentBall = whiteball; //white starts first
+        isWhitePlayer = true;
+        //path = new BallPath(whiteball.getPosition(),0,30);
+        path = new BallPath(currentBall.getPosition(),0,30);
         
         balls.add(whiteball);
         balls.add(redball);
@@ -177,17 +183,18 @@ public class CaromTable extends JPanel
         }
         
         for (Ball b: balls) 
-        {// draw a circle outline for each ball 
-            g.setColor(edge);
-            g.drawOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
-                    (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
-                    (int)(2*radius*ppi), (int)(2*radius*ppi));
-
+        {        	
             // draw a filled circle for each ball 
             g.setColor(b.getColor());
             g.fillOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
                     (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
-                    (int)(2*radius*ppi), (int)(2*radius*ppi));          
+                    (int)(2*radius*ppi), (int)(2*radius*ppi));
+            
+            // draw a circle outline for each ball 
+            g.setColor(edge);
+            g.drawOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
+                    (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
+                    (int)(2*radius*ppi), (int)(2*radius*ppi));
         }
         
         /*
@@ -196,14 +203,18 @@ public class CaromTable extends JPanel
         if(showCue)
         {
         	
-        	double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().x) * ppi);
-        	double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().y) * ppi);
+        	//double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().x) * ppi);
+        	//double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().y) * ppi);
+        	double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+currentBall.getPosition().x) * ppi);
+        	double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+currentBall.getPosition().y) * ppi);
         
         	double angle = Math.atan2(dy, dx) - Math.toRadians(90);
         	cueStick.setAngle(angle);
         
-        	cueStick.setPosition(( floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
-				(pullDistance + floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + gap));
+        	//cueStick.setPosition(( floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
+			//	(pullDistance + floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + gap));
+			cueStick.setPosition(( floorWidth + borderWidth + cushionWidth + currentBall.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
+				(pullDistance + floorWidth + borderWidth +cushionWidth + currentBall.getPosition().y - radius + gap));	
         
         
         	int[] cuesX = new int[]{(int)(cueStick.getX()*ppi),
@@ -215,12 +226,14 @@ public class CaromTable extends JPanel
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi),
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi)};
         	///
-        	 path.updateProp(whiteball.getPosition(), angle);
+        	 //path.updateProp(whiteball.getPosition(), angle);
+        	path.updateProp(currentBall.getPosition(), angle);
         	 path.draw(g,cushionWidth,floorWidth,borderWidth);
         	///
              
         	AffineTransform transform = new AffineTransform();
-        	transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
+        	//transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
+        	transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + currentBall.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + currentBall.getPosition().y  )*ppi);
         	Graphics2D g2d = (Graphics2D)g;
         	g2d.transform(transform);
 			g2d.setColor(Color.BLUE);
@@ -284,9 +297,24 @@ public class CaromTable extends JPanel
     		}
     		if(pullDistance < 0)
     		{
-    			Physics.hitBall(cueStick,whiteball);
+    			//Physics.hitBall(cueStick,whiteball);
+    			Physics.hitBall(cueStick,currentBall);
+    			
     			pullDistance = 0;
     			System.out.println("hit");
+    			
+    		
+    			//switch players (balls)
+    			if (isWhitePlayer)
+    			{
+    				currentBall = yellowball;
+    				isWhitePlayer = false;
+    			}
+    			else//ball is yellow
+    			{
+    				currentBall = whiteball;
+    				isWhitePlayer = true;
+    			}
     		}
     		
     		//Check if balls are at rest
@@ -294,8 +322,9 @@ public class CaromTable extends JPanel
     				&& yellowball.getVelocity().x == 0 && yellowball.getVelocity().y  == 0
     				&& redball.getVelocity().x == 0&& redball.getVelocity().y == 0)
     		{
-    			showCue = true;
-    		}else
+    			showCue = true;    			
+    		}
+    		else
     		{
     			showCue = false;
     		}
