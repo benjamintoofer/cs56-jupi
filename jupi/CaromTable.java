@@ -20,6 +20,7 @@ public class CaromTable extends JPanel
     private Ball whiteball, redball, yellowball;
     private BallPath path;
     private Cue cueStick;
+    
     private ArrayList<Ball> balls = new ArrayList<>();
     private Color felt, border, floor, edge, mark;
     int mouseX,mouseY;
@@ -57,8 +58,8 @@ public class CaromTable extends JPanel
         balls.add(whiteball);
         balls.add(redball);
         balls.add(yellowball);
-        
-     
+       
+       
         
         whiteball.setVelocity(0,0);
         redball.setVelocity(0,0);
@@ -137,6 +138,8 @@ public class CaromTable extends JPanel
                    (int)(dimTable[0] * ppi),
                    (int)(dimTable[1] * ppi));
 
+       
+        
         /* draw a line segment connecting the play field corners to each border corner */
         g.drawLine(cushionEdge, cushionEdge, tableEdge, tableEdge);
         g.drawLine(cushionEdge + (int)dimCushion[0] * ppi, cushionEdge,
@@ -178,18 +181,22 @@ public class CaromTable extends JPanel
         
         for (Ball b: balls) 
         {// draw a circle outline for each ball 
-            g.setColor(edge);
+        	if(b.isVisible())
+        	{
+        		g.setColor(edge);
             g.drawOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
-                    (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
+                    (int)((floorWidth + borderWidth + cushionWidth + b.getPosition().y-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
 
             // draw a filled circle for each ball 
             g.setColor(b.getColor());
             g.fillOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
                     (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
-                    (int)(2*radius*ppi), (int)(2*radius*ppi));          
+                    (int)(2*radius*ppi), (int)(2*radius*ppi));   
+        	}
+                   
         }
-        
+   
         /*
          * Drawing cue stick
          */
@@ -230,9 +237,8 @@ public class CaromTable extends JPanel
 		
 			g2d.setColor(new Color(0xDBB84D));
 			g2d.fillPolygon(cuesX, cuesY, 4);
-        }
+        }//Cue
        
-		
         
         
     }//paintComponent
@@ -268,37 +274,36 @@ public class CaromTable extends JPanel
 
     public void update()
     {
-    	
-    	
+    	//Mouse down even to hit ball
+		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL && showCue)
+		{
+			pullDistance += BilliardsConstants.PULL_RATE;
+			cueStick.setPower(pullDistance);
+			
+		}else if(!mouseDown && pullDistance > 0)
+		{
+			pullDistance -= 3; 
+		}
+		if(pullDistance < 0)
+		{
+			Physics.hitBall(cueStick,whiteball);
+			pullDistance = 0;
+			
+		}
+		//Check if balls are at rest
+		if(whiteball.getVelocity().x ==0 && whiteball.getVelocity().y == 0
+				&& yellowball.getVelocity().x == 0 && yellowball.getVelocity().y  == 0
+				&& redball.getVelocity().x == 0&& redball.getVelocity().y == 0)
+		{
+			showCue = true;
+		}else
+		{
+			showCue = false;
+		}
+    	//Update each ball
     	for(int i = 0; i < balls.size(); i++)
     	{
-    		//Mouse down even to hit ball
-    		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL && showCue)
-    		{
-    			pullDistance += BilliardsConstants.PULL_RATE;
-    			cueStick.setPower(pullDistance);
-    			
-    		}else if(!mouseDown && pullDistance > 0)
-    		{
-    			pullDistance -= 1; 
-    		}
-    		if(pullDistance < 0)
-    		{
-    			Physics.hitBall(cueStick,whiteball);
-    			pullDistance = 0;
-    			System.out.println("hit");
-    		}
     		
-    		//Check if balls are at rest
-    		if(whiteball.getVelocity().x ==0 && whiteball.getVelocity().y == 0
-    				&& yellowball.getVelocity().x == 0 && yellowball.getVelocity().y  == 0
-    				&& redball.getVelocity().x == 0&& redball.getVelocity().y == 0)
-    		{
-    			showCue = true;
-    		}else
-    		{
-    			showCue = false;
-    		}
     		
     		Physics.checkCusionCollision(balls.get(i), this);
     		
@@ -307,6 +312,8 @@ public class CaromTable extends JPanel
     			Physics.checkBallCollision(balls.get(i), balls.get(j));
     		}
     		balls.get(i).update();
+    		
+    		
     	}
     	
     	repaint();

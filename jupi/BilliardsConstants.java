@@ -11,7 +11,8 @@ public interface BilliardsConstants
 {
 	//int PIXELS_PER_INCH= 8;
 	int PIXELS_PER_INCH= 9;
-    int INCHES_PER_FOOT = 12;    
+    int INCHES_PER_FOOT = 12; 
+    int MAX_BALLS = 9;
 
     /**
      * {@code double} array containing the width and height, in inches, of the region which can contain balls.
@@ -32,7 +33,10 @@ public interface BilliardsConstants
      * Radius, in inches, of the table border's corners.
      */
     double BORDER_CORNER = 5;
-
+    /**
+     * Diameter, in inches, of pockets.
+     */
+    double POCKET_DIAMETER = 4.2;
     /**
      * Width, in inches, of the empty space surrounding the table and cushions.
      */
@@ -130,7 +134,7 @@ public interface BilliardsConstants
     /**
      * Rate of cue stick pull
      */
-    double PULL_RATE = .1;
+    double PULL_RATE = .3;
     
     /**
      * Maximum distance of pull

@@ -10,8 +10,10 @@ import javax.swing.*;
 public class Ball 
 {
     private Color color;
-    private VectorDouble position, velocity;
+    private VectorDouble position,velocity;
     private double mass, radius;
+    private boolean visible;
+    private final  VectorDouble startPosition;
 
     /**
      * Default constructor makes an odd-colored (blue) ball at position 0,0.
@@ -25,10 +27,12 @@ public class Ball
     public Ball(double x, double y, double radius, double mass, Color c) 
     {        
         position    = new VectorDouble(x,y);
+        startPosition = new VectorDouble(x,y);
         velocity    = new VectorDouble(0,0);
         this.radius = radius;
         this.mass   = mass;
         color       = c;
+        visible = true;
     }
 
     public Ball(double x, double y, Color c) 
@@ -68,7 +72,14 @@ public class Ball
     {
     	return velocity;
     }
-    
+    public boolean isVisible()
+    {
+    	return visible;
+    }
+    public void setVisible(boolean isVisible)
+    {
+    	this.visible = isVisible; 
+    }
     public void setVelocity(VectorDouble velocity)
     {
     	this.velocity = velocity;
@@ -101,10 +112,17 @@ public class Ball
     {
     	return mass;
     }
-    
+    public void reset()
+    {
+    	double tempX = startPosition.x;
+    	double tempY = startPosition.y;
+    	this.setPosition(tempX,tempY);
+    	this.setVelocity(0, 0);
+    }
     //Update balls properties
     public void update()
     {    
+    	
     	velocity.x *= BilliardsConstants.ROLLING_FRICTION;
     	velocity.y *= BilliardsConstants.ROLLING_FRICTION;
     	if(Math.abs(velocity.x) < BilliardsConstants.MINIMUM_SPEED)

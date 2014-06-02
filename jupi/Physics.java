@@ -17,31 +17,73 @@ public class Physics
 		double leftCushion   = 0, 
 			   topCushion    = 0;
 		double bottomCushion = table.getTableHeight();
+		double pocketGap = 2;
 		
 		
 		//Collision with left wall
-		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0))
+		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0) && yPos > topCushion + pocketGap && yPos < bottomCushion - pocketGap)
 		{
 			ball.setPosition(radius, yPos);
 			ball.reflect(true, false);			
 		}
 		
 		//Collision with right wall
-		if(xPos + radius > rightCushion && (ball.getVelocity().x > 0))
+		if(xPos + radius > rightCushion && (ball.getVelocity().x > 0) && yPos > topCushion + pocketGap && yPos < bottomCushion - pocketGap)
 		{
 			ball.setPosition(rightCushion - radius, yPos);
 			ball.reflect(true, false);
 		}
 
 		//Collision with bottom wall
-		if(yPos + radius > bottomCushion && (ball.getVelocity().y > 0))
+		if(yPos + radius > bottomCushion && (ball.getVelocity().y > 0) && xPos > leftCushion + pocketGap && xPos < rightCushion - pocketGap)
 		{	
 			ball.setPosition(xPos, bottomCushion - radius);
 			ball.reflect(false, true);
 		}
 		
 		//Collision with top wall
-		if(yPos - radius < topCushion && ball.getVelocity().y < 0)
+		if(yPos - radius < topCushion && ball.getVelocity().y < 0 && xPos > leftCushion + pocketGap && xPos < rightCushion - pocketGap)
+		{
+			ball.setPosition(xPos,radius);
+			ball.reflect(false, true);
+		}	
+		
+	}//checkCusionCollision
+	public static void checkCusionCollision(Ball ball,JupiTable table)
+	{
+		double xPos          = ball.getPosition().x;
+		double yPos          = ball.getPosition().y;
+		double radius        = ball.getRadius();
+		double rightCushion  = table.getTableWidth();
+		double leftCushion   = 0, 
+			   topCushion    = 0;
+		double bottomCushion = table.getTableHeight();
+		double pocketGap = 2;
+		
+		
+		//Collision with left wall
+		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0) && yPos > topCushion + pocketGap && yPos < bottomCushion - pocketGap)
+		{
+			ball.setPosition(radius, yPos);
+			ball.reflect(true, false);			
+		}
+		
+		//Collision with right wall
+		if(xPos + radius > rightCushion && (ball.getVelocity().x > 0) && yPos > topCushion + pocketGap && yPos < bottomCushion - pocketGap)
+		{
+			ball.setPosition(rightCushion - radius, yPos);
+			ball.reflect(true, false);
+		}
+
+		//Collision with bottom wall
+		if(yPos + radius > bottomCushion && (ball.getVelocity().y > 0) && xPos > leftCushion + pocketGap && xPos < rightCushion - pocketGap)
+		{	
+			ball.setPosition(xPos, bottomCushion - radius);
+			ball.reflect(false, true);
+		}
+		
+		//Collision with top wall
+		if(yPos - radius < topCushion && ball.getVelocity().y < 0 && xPos > leftCushion + pocketGap && xPos < rightCushion - pocketGap)
 		{
 			ball.setPosition(xPos,radius);
 			ball.reflect(false, true);
@@ -161,6 +203,31 @@ public class Physics
 		}else{
 			return 0;
 		}
+		
+	}
+	public static boolean checkInPocket(Ball b,Pocket p)
+	{
+		double dx = b.getPosition().x + (BilliardsConstants.BORDER_WIDTH+BilliardsConstants.CUSHION_WIDTH+BilliardsConstants.FLOOR_WIDTH)  - p.getPosition().x - p.getDiameter()/4 ;
+		double dy = b.getPosition().y + (BilliardsConstants.BORDER_WIDTH+BilliardsConstants.CUSHION_WIDTH+BilliardsConstants.FLOOR_WIDTH) - p.getPosition().y - p.getDiameter()/4 ;
+		double distance = Math.sqrt(dx*dx + dy*dy);
+		//System.out.println(p.getDiameter()/2);
+		if(distance < (p.getDiameter()/2))
+		{
+			if(b.getColor() != BilliardsConstants.WHITE && b.isVisible())
+			{
+				System.out.print("removed-------->>>>>");
+				p.balls[p.numBalls++] = b;
+				b.setVisible(false);
+				b.setVelocity(0, 0);
+				return true;
+			}else{
+				System.out.println("white ball in");
+				b.reset();
+				return false;
+			}
+				
+		}
+		return false;
 		
 	}
 }//Physics
