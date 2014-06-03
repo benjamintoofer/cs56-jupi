@@ -120,6 +120,11 @@ public interface BilliardsConstants
      * Default color of the yellow ball.
      */
     Color YELLOW = new Color(0xcccc00);
+    
+    /**
+     * Default color of the purple ball.
+     */
+    Color PURPLE = new Color(0x7D26CD);
 
     /**
      * Default color for rendering edges of objects.

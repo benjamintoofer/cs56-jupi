@@ -17,12 +17,12 @@ public class JupiTable extends JPanel
     private double[] dimTable, dimCushion, dimBorder, dimFloor;
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
     private int ppi;//pixels per inch
-    private Ball whiteball, redball, yellowball;
+    private Ball whiteball, redball, yellowball,blueball,orangeball,greenball,blackball,purpleball;
     private BallPath path;
     private Cue cueStick;
     
     //***************
-    private Pocket pocketOne,pocketTwo,pocketThree,pocketFour,pocketFive,pocketSix;
+    private Pocket pocketOne,pocketTwo,pocketThree,pocketFour;
     private ArrayList<Pocket> pockets = new ArrayList<>();
     //************************
     private ArrayList<Ball> balls = new ArrayList<>();
@@ -57,11 +57,21 @@ public class JupiTable extends JPanel
         whiteball  = new Ball(dimTable[0] / 3 , dimTable[1] /2  ,radius,mass, BilliardsConstants.WHITE);
         redball    = new Ball(dimTable[0] *2/3, dimTable[1] *2/5,radius,mass, BilliardsConstants.RED);
         yellowball = new Ball(dimTable[0] *2/3, dimTable[1] *3/5,radius,mass, BilliardsConstants.YELLOW);
+        purpleball = new Ball(dimTable[0] *2/3,  dimTable[1]/2,   radius,mass, BilliardsConstants.PURPLE);
+        blueball   = new Ball(dimTable[0] *15/24, dimTable[1] *7/15,radius,mass, Color.BLUE);
+        orangeball = new Ball(dimTable[0] *17/24, dimTable[1] *7/15,radius,mass, Color.ORANGE);
+        greenball = new Ball(dimTable[0] *15/24, dimTable[1] *8/15,radius,mass, Color.GREEN);
+        blackball = new Ball(dimTable[0] *17/24, dimTable[1] *8/15,radius,mass, Color.BLACK);
         path = new BallPath(whiteball.getPosition(),0,30);
         
         balls.add(whiteball);
         balls.add(redball);
         balls.add(yellowball);
+        balls.add(purpleball);
+        balls.add(blueball);
+        balls.add(orangeball);
+        balls.add(greenball);
+        balls.add(blackball);
        
         //******************
         pocketOne = new Pocket(dimTable[0]/10 + 2.7,dimTable[1]/5 + 2.7);
