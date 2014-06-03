@@ -131,7 +131,7 @@ public class CaromTable extends JPanel
         	// -----------------------------------------------------------------------------
         	updateScore();
         	//System.out.printf("Score = %d\n", score);
-        	System.out.printf("SwitchPlayers = " + isSwitchPlayers + "\n");//testing
+        	//System.out.printf("SwitchPlayers = " + isSwitchPlayers + "\n");//testing
         	
         	drawCue(g);
         }//if        
@@ -276,8 +276,7 @@ public class CaromTable extends JPanel
         
 
     public void update()
-    {
-/* This code is repeated below!  	
+    { 	
     	//Mouse down even to hit ball
 		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL && showCue)
 		{
@@ -289,25 +288,22 @@ public class CaromTable extends JPanel
 			pullDistance -= 3; 
 		}
 		if(pullDistance < 0)
-		{
-			//Physics.hitBall(cueStick,whiteball);
+		{	
 			Physics.hitBall(cueStick,currentBall);
-			pullDistance = 0;
-			
+			pullDistance = 0;			
+			isSwitchPlayers = true; //reset
 		}
-*/		
+		
 		//Check if balls are at rest
     	if (isBallsStopped())		
 		{
-			showCue = true;			
-//*		
+			showCue = true;	
 //-------------------------------------------------------------------			
 		    if (isSwitchPlayers)			
 		    {
 		    	switchPlayers();	
     		}//if
 //-------------------------------------------------------------------
-//*/
 		}
 		else
 		{
@@ -316,43 +312,7 @@ public class CaromTable extends JPanel
 		
     	//Update each ball
     	for(int i = 0; i < balls.size(); i++)
-    	{
-    		//Mouse down even to hit ball
-    		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL && showCue)
-    		{
-    			pullDistance += BilliardsConstants.PULL_RATE;
-    			cueStick.setPower(pullDistance);
-    			
-    		}else if(!mouseDown && pullDistance > 0)
-    		{
-    			pullDistance -= 1; 
-    		}
-    		
-    		if(pullDistance < 0)
-     		{    			
-    			Physics.hitBall(cueStick,currentBall);
-    			
-    			pullDistance = 0;
-    			System.out.println("hit");
-    			
-    			isSwitchPlayers = true; //reset    			
-
-    			
-    		}
- /*testing: this code is repeated above and not needed here! 		
-    		//Check if balls are at rest
-    		if(whiteball.getVelocity().x ==0 && whiteball.getVelocity().y == 0
-    				&& yellowball.getVelocity().x == 0 && yellowball.getVelocity().y  == 0
-    				&& redball.getVelocity().x == 0&& redball.getVelocity().y == 0)
-    		{
-    			showCue = true;        			
-    		}
-    		else
-    		{
-    			showCue = false;
-    		}
-*/
-    		
+    	{    		
     		Physics.checkCusionCollision(balls.get(i), this);
     		
     		Ball ball1, ball2;

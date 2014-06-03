@@ -28,7 +28,8 @@ public interface BilliardsConstants
 
     /**The speed below which a ball will be stopped on the next timeslice. Units?
      * Should be > 0.  */
-    double MINIMUM_SPEED = 0.02;
+    //double MINIMUM_SPEED = 0.02;
+    double MINIMUM_SPEED = 0.05;
     
     
     
