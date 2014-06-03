@@ -14,6 +14,8 @@ public class Ball
     private double mass, radius;
     private boolean visible;
     private final  VectorDouble startPosition;
+    private boolean currentBall;//used to track which ball is hit by cue
+    private boolean isHit;
 
     /**
      * Default constructor makes an odd-colored (blue) ball at position 0,0.
@@ -33,6 +35,8 @@ public class Ball
         this.mass   = mass;
         color       = c;
         visible = true;
+        currentBall = false; 
+        isHit = false;
     }
 
     public Ball(double x, double y, Color c) 
@@ -59,7 +63,6 @@ public class Ball
 
     public void setPosition(VectorDouble position) 
     {
-
         this.position = position;
     }
     
@@ -72,14 +75,17 @@ public class Ball
     {
     	return velocity;
     }
+    
     public boolean isVisible()
     {
     	return visible;
     }
+    
     public void setVisible(boolean isVisible)
     {
     	this.visible = isVisible; 
     }
+    
     public void setVelocity(VectorDouble velocity)
     {
     	this.velocity = velocity;
@@ -97,9 +103,8 @@ public class Ball
     		this.setVelocity((this.getVelocity().getX()*-1), this.getVelocity().getY());
     	}
     	if(y)
-    	{    //System.out.println("Before "+this.getVelocity().x+"  "+this.getVelocity().y);	
-    		this.setVelocity((this.getVelocity().getX()), (this.getVelocity().getY() * -1));
-    		//System.out.println("After"+this.getVelocity().x+"  "+this.getVelocity().y);	
+    	{   	
+    		this.setVelocity((this.getVelocity().getX()), (this.getVelocity().getY() * -1));    			
     	}
     }
           
@@ -119,10 +124,10 @@ public class Ball
     	this.setPosition(tempX,tempY);
     	this.setVelocity(0, 0);
     }
+    
     //Update balls properties
     public void update()
-    {    
-    	
+    {        	
     	velocity.x *= BilliardsConstants.ROLLING_FRICTION;
     	velocity.y *= BilliardsConstants.ROLLING_FRICTION;
     	if(Math.abs(velocity.x) < BilliardsConstants.MINIMUM_SPEED)
@@ -136,5 +141,23 @@ public class Ball
     	position.x += velocity.x;
     	position.y += velocity.y;    	
     }  
+    
+    public void setCurrentBall(boolean isCurrentBall)
+    {
+    	currentBall = isCurrentBall;
+    }
+    
+    public boolean isCurrentBall()
+    {
+    	return currentBall;
+    }
+    public void setIsHit(boolean isHit)
+    {
+    	this.isHit  = isHit;
+    }
+    public boolean isHit()
+    {
+    	return this.isHit;
+    }
 
 }//Ball

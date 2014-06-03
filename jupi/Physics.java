@@ -8,6 +8,9 @@ public class Physics
 {	
 	private static int  ppi = BilliardsConstants.PIXELS_PER_INCH;	
 	
+	private static boolean isRedHit = false;//checks if current ball has hit red ball    
+	private static boolean isOtherBallHit = false; //checks if current ball has hit the other (not red) ball (i.e. Yellow or White)    
+	
 	public static void checkCusionCollision(Ball ball,CaromTable table)
 	{
 		double xPos          = ball.getPosition().x;
@@ -90,7 +93,9 @@ public class Physics
 		}	
 		
 	}//checkCusionCollision
-	public static void checkBallCollision(Ball ball1, Ball ball2)
+	
+	//public static void checkBallCollision(Ball ball1, Ball ball2)
+	public static boolean checkBallCollision(Ball ball1, Ball ball2)
 	{
 		//Check if balls collide
 		double dx = ball2.getPosition().x - ball1.getPosition().x;
@@ -98,8 +103,12 @@ public class Physics
 		double distance = Math.sqrt(dx*dx + dy*dy);
 		double radiusDistance = ball1.getRadius() + ball2.getRadius();
 		
-		if(distance <= radiusDistance)
-		{
+		boolean isCollision = false;
+		
+		if(distance <= radiusDistance) 
+		{//collision has occurred
+			isCollision = true;
+			
 			double angle = Math.atan2(dy, dx);
 			double sin = Math.sin(angle);
 			double cos = Math.cos(angle);
@@ -141,9 +150,12 @@ public class Physics
 			ball1.setVelocity(finalVel1);
 			ball2.setVelocity(finalVel2);
 			
-			//System.out.println("Collided");
-		}
+			//System.out.println("Collided");			
+		}//if
+		
+		return isCollision;
 	}//checkBallCollision
+	
 	public static void hitBall(Cue cue, Ball ball)
 	{
 		double powerMulti = 0.35;
