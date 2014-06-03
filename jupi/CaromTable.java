@@ -21,12 +21,17 @@ public class CaromTable extends JPanel
     private Ball currentBall; // current ball being played, can be white or yellow
     boolean isWhitePlayer; //determines player's turn - True: white, False: Yellow
     private BallPath path;
-    private Cue cueStick;
+    private Cue cueStick;    
     
     private ArrayList<Ball> balls = new ArrayList<>();
     private Color felt, border, floor, edge, mark;
     int mouseX,mouseY;
     boolean mouseDown,showCue;
+    boolean isRedHit = false; //checks if current ball has hit red ball
+    boolean isOtherBallHit = false; //checks if current ball has hit the other (not red) ball (i.e. Yellow or White)   
+    boolean isSwitchPlayers = false;
+        
+    int score = 0;//players score
     
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -58,14 +63,14 @@ public class CaromTable extends JPanel
         
         currentBall = whiteball; //white starts first
         isWhitePlayer = true;
-        //path = new BallPath(whiteball.getPosition(),0,30);
+        currentBall.setCurrentBall(true);
+       
         path = new BallPath(currentBall.getPosition(),0,30);
         
         balls.add(whiteball);
         balls.add(redball);
         balls.add(yellowball);
-       
-       
+              
         
         whiteball.setVelocity(0,0);
         redball.setVelocity(0,0);
@@ -81,15 +86,17 @@ public class CaromTable extends JPanel
         {
 
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) 	{}
 
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent e) 
+			{
 				mouseDown = true;
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) 
+			{
 				mouseDown = false;
 				
 			}
@@ -101,6 +108,7 @@ public class CaromTable extends JPanel
 			public void mouseExited(MouseEvent e) {}
         	
         });
+        
         this.addMouseMotionListener(new MouseMotionListener()
         {
         	public void mouseMoved(MouseEvent e)
@@ -108,6 +116,7 @@ public class CaromTable extends JPanel
         		mouseX = e.getX();
         		mouseY = e.getY();
         	}
+        	
         	public void mouseDragged(MouseEvent e) {}
         });//MouseMotionListener
         
@@ -143,7 +152,6 @@ public class CaromTable extends JPanel
         g.drawRect(tableEdge, tableEdge,
                    (int)(dimTable[0] * ppi),
                    (int)(dimTable[1] * ppi));
-
        
         
         /* draw a line segment connecting the play field corners to each border corner */
@@ -186,9 +194,7 @@ public class CaromTable extends JPanel
         }
         
         for (Ball b: balls) 
-
-        {        	
-
+        {  
             // draw a filled circle for each ball 
             g.setColor(b.getColor());
             g.fillOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
@@ -200,7 +206,6 @@ public class CaromTable extends JPanel
             g.drawOval((int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi),
                     (int)((floorWidth + borderWidth +cushionWidth + b.getPosition().y-radius) * ppi),
                     (int)(2*radius*ppi), (int)(2*radius*ppi));
-
         }
    
         /*
@@ -208,21 +213,21 @@ public class CaromTable extends JPanel
          */
         if(showCue)
         {
+        	// -----------------------------------------------------------------------------
+        	updateScore();
+        	//System.out.printf("Score = %d\n", score);
+        	System.out.printf("SwitchPlayers = " + isSwitchPlayers + "\n");//testing
         	
-        	//double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().x) * ppi);
-        	//double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+whiteball.getPosition().y) * ppi);
+        	        	
         	double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+currentBall.getPosition().x) * ppi);
         	double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+currentBall.getPosition().y) * ppi);
         
         	double angle = Math.atan2(dy, dx) - Math.toRadians(90);
         	cueStick.setAngle(angle);
-        
-        	//cueStick.setPosition(( floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
-			//	(pullDistance + floorWidth + borderWidth +cushionWidth + whiteball.getPosition().y - radius + gap));
+                	
 			cueStick.setPosition(( floorWidth + borderWidth + cushionWidth + currentBall.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
 				(pullDistance + floorWidth + borderWidth +cushionWidth + currentBall.getPosition().y - radius + gap));	
-        
-        
+                
         	int[] cuesX = new int[]{(int)(cueStick.getX()*ppi),
         					(int)((cueStick.getX() + BilliardsConstants.CUE_DIAMETER )*ppi),
         					(int)((cueStick.getX() +  1.5*BilliardsConstants.CUE_DIAMETER )*ppi),
@@ -231,14 +236,12 @@ public class CaromTable extends JPanel
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi),
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi)};
-        	///
-        	 //path.updateProp(whiteball.getPosition(), angle);
+        
         	path.updateProp(currentBall.getPosition(), angle);
         	 path.draw(g,cushionWidth,floorWidth,borderWidth);
-        	///
-             
+                     
         	AffineTransform transform = new AffineTransform();
-        	//transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
+        
         	transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + currentBall.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + currentBall.getPosition().y  )*ppi);
         	Graphics2D g2d = (Graphics2D)g;
         	g2d.transform(transform);
@@ -250,8 +253,6 @@ public class CaromTable extends JPanel
 			g2d.setColor(new Color(0xDBB84D));
 			g2d.fillPolygon(cuesX, cuesY, 4);
         }//Cue
-       
-        
         
     }//paintComponent
 
@@ -273,6 +274,7 @@ public class CaromTable extends JPanel
     {
     	return dimTable[0];
     }
+    
     public double getTableHeight()
     {
     	return dimTable[1];
@@ -286,6 +288,7 @@ public class CaromTable extends JPanel
 
     public void update()
     {
+/* This code is repeated below!  	
     	//Mouse down even to hit ball
 		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL && showCue)
 		{
@@ -298,24 +301,35 @@ public class CaromTable extends JPanel
 		}
 		if(pullDistance < 0)
 		{
-			Physics.hitBall(cueStick,whiteball);
+			//Physics.hitBall(cueStick,whiteball);
+			Physics.hitBall(cueStick,currentBall);
 			pullDistance = 0;
 			
 		}
+*/		
 		//Check if balls are at rest
 		if(whiteball.getVelocity().x ==0 && whiteball.getVelocity().y == 0
 				&& yellowball.getVelocity().x == 0 && yellowball.getVelocity().y  == 0
 				&& redball.getVelocity().x == 0&& redball.getVelocity().y == 0)
 		{
-			showCue = true;
-		}else
+			showCue = true;			
+//*		
+//-------------------------------------------------------------------			
+		    if (isSwitchPlayers)			
+		    {
+		    	switchPlayers();	
+    		}//if
+//-------------------------------------------------------------------
+//*/
+		}
+		else
 		{
 			showCue = false;
 		}
+		
     	//Update each ball
     	for(int i = 0; i < balls.size(); i++)
     	{
-
     		//Mouse down even to hit ball
     		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL && showCue)
     		{
@@ -326,52 +340,126 @@ public class CaromTable extends JPanel
     		{
     			pullDistance -= 1; 
     		}
+    		
     		if(pullDistance < 0)
-    		{
-    			//Physics.hitBall(cueStick,whiteball);
+     		{    			
     			Physics.hitBall(cueStick,currentBall);
     			
     			pullDistance = 0;
     			System.out.println("hit");
     			
-    		
-    			//switch players (balls)
-    			if (isWhitePlayer)
-    			{
-    				currentBall = yellowball;
-    				isWhitePlayer = false;
-    			}
-    			else//ball is yellow
-    			{
-    				currentBall = whiteball;
-    				isWhitePlayer = true;
-    			}
+    			isSwitchPlayers = true; //reset    			
+
+    			
     		}
-    		
+ /*testing: this code is repeated above and not needed here! 		
     		//Check if balls are at rest
     		if(whiteball.getVelocity().x ==0 && whiteball.getVelocity().y == 0
     				&& yellowball.getVelocity().x == 0 && yellowball.getVelocity().y  == 0
     				&& redball.getVelocity().x == 0&& redball.getVelocity().y == 0)
     		{
-    			showCue = true;    			
+    			showCue = true;        			
     		}
     		else
     		{
     			showCue = false;
     		}
-
+*/
     		
     		Physics.checkCusionCollision(balls.get(i), this);
     		
+    		Ball ball1, ball2;
     		for(int j = i + 1; j < balls.size(); j++)
-    		{
-    			Physics.checkBallCollision(balls.get(i), balls.get(j));
-    		}
+    		{    			
+    			ball1 = balls.get(i);
+    			ball2 = balls.get(j);
+    			
+    			if (Physics.checkBallCollision(ball1, ball2))
+    			{
+    				if (ball1.isCurrentBall() == true)
+    				{ 
+    					checkIfScored(ball2);    								
+    				}
+    				else if (ball2.isCurrentBall() == true)
+    				{    
+    					checkIfScored(ball1);					
+    				}    				
+    			}
+    		}//for j
     		balls.get(i).update();
     		
     		
-    	}
+    	}//for i
     	
     	repaint();
+    }//update
+    
+    
+    public void checkIfScored(Ball ball)
+    {
+    	if (ball == redball)
+		{
+			isRedHit = true;
+			System.out.print("Red Ball Hit!!!");
+		}    				
+		else if (ball == whiteball || ball == yellowball)
+		{//other ball hit (white or yellow, depending on which current ball is)
+			isOtherBallHit = true;
+			System.out.print("OtherBall Hit!!!");
+		}			    	
     }
+    
+    
+  //==================================================================  
+    public void updateScore()
+    {
+    	if (isRedHit && isOtherBallHit)
+    	{//same player keeps on playing
+    		score++;
+    		isSwitchPlayers = false;
+    		System.out.printf("\nScore = %d\n", score);
+    	}
+    	else //No score
+    	{    		
+    		//isSwitchPlayers= true;
+    		//if (isSwitchPlayers)
+    			//switchPlayers();
+    	}//else
+    	
+    	//reset:
+    	isRedHit = false;
+    	isOtherBallHit = false;
+    }//updateScore
+    
+    
+    public void switchPlayers()
+    {    	
+	    	if (whiteball.isCurrentBall())
+				System.out.print(" Current Bal = WHITE ");
+			else if (yellowball.isCurrentBall())
+				System.out.print(" Current Bal = yellowball ");
+	    	
+			//switch players (balls)
+			if (isWhitePlayer)
+			{
+				whiteball.setCurrentBall(false);
+				yellowball.setCurrentBall(true);	    				
+				//currentBall.setCurrentBall(false);//change current ball	    				    				
+				currentBall = yellowball;
+				//currentBall.setCurrentBall(true);//new current ball	    				
+				isWhitePlayer = false;    				
+			}
+			else//ball is yellow
+			{
+				whiteball.setCurrentBall(true);
+				yellowball.setCurrentBall(false);
+				//currentBall.setCurrentBall(false);//change current ball
+				currentBall = whiteball;
+				//currentBall.setCurrentBall(true);//new current ball
+				isWhitePlayer = true;
+			}	
+			
+			isSwitchPlayers = false; //reset
+    }//switchPlayers
+    
 }

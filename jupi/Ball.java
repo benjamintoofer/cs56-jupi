@@ -14,6 +14,7 @@ public class Ball
     private double mass, radius;
     private boolean visible;
     private final  VectorDouble startPosition;
+    private boolean currentBall;//used to track which ball is hit by cue
 
     /**
      * Default constructor makes an odd-colored (blue) ball at position 0,0.
@@ -33,6 +34,8 @@ public class Ball
         this.mass   = mass;
         color       = c;
         visible = true;
+        currentBall = false;
+        
     }
 
     public Ball(double x, double y, Color c) 
@@ -136,5 +139,15 @@ public class Ball
     	position.x += velocity.x;
     	position.y += velocity.y;    	
     }  
+    
+    public void setCurrentBall(boolean isCurrentBall)
+    {
+    	currentBall = isCurrentBall;
+    }
+    
+    public boolean isCurrentBall()
+    {
+    	return currentBall;
+    }
 
 }//Ball
