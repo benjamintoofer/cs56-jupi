@@ -26,7 +26,7 @@ public class Score
 		score = 0;
 		updated = false;		
 	}
-	public Score(double x, double y,String playerName,JPanel myPanel,Color color)
+	public Score(double x, double y, String playerName, JPanel myPanel, Color color)
 	{
 		this.position = new VectorDouble(x,y);
 		this.score = 0;

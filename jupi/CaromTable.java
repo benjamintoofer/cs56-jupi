@@ -38,8 +38,7 @@ public class CaromTable extends JPanel implements EventListener
     /**Keeps track of current player's score (white or yellow)*/
     Score currentScore;
     int score = 0;//players score
-    
-    JLabel scoreDisplay;
+   
     
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -81,18 +80,12 @@ public class CaromTable extends JPanel implements EventListener
         
         whiteball.setVelocity(0,0);
         redball.setVelocity(0,0);
-        yellowball.setVelocity(0,0);
-                
-        whiteScore   = new Score();
-        yellowScore  = new Score();
-        currentScore = new Score();
+        yellowball.setVelocity(0,0);            
+        
+        whiteScore   = new Score((dimTable[0]* 2/7)*ppi,(dimTable[1]* 1/15)*ppi,"White",this, Color.WHITE);
+        yellowScore  = new Score((dimTable[0]* 5/7)*ppi,(dimTable[1]* 1/15)*ppi," Yellow",this, Color.YELLOW);
         currentScore = whiteScore; //white starts first  
-        
-        
-        scoreDisplay = new JLabel();//testing
-        this.add(scoreDisplay);
-        scoreDisplay.setText("Score = __");
-        
+       
         felt   = BilliardsConstants.FELT;
         border = BilliardsConstants.BORDER;
         floor  = BilliardsConstants.FLOOR;
@@ -147,10 +140,8 @@ public class CaromTable extends JPanel implements EventListener
         //Drawing cue stick         
         if(showCue)
         {        	
-        	System.out.printf("Score = %d\n", score);
-        	String display = "TScr= "+score+" W = "+whiteScore.getScore()+" Y = "+yellowScore.getScore();
-        	scoreDisplay.setText(display);
-                	
+        	System.out.printf("Score = %d\n", score);        	
+        	    	
         	drawCue(g);
         }//if        
     }//paintComponent
