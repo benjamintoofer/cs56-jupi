@@ -158,7 +158,8 @@ public class Physics
 	
 	public static void hitBall(Cue cue, Ball ball)
 	{
-		double powerMulti = 0.35;
+		//double powerMulti = 0.35;
+		double powerMulti = 0.3;
 		double newXVel = (cue.getPower()*powerMulti) * Math.cos(cue.getAngle() - Math.toRadians(90));
 		double newYVel = (cue.getPower()*powerMulti) * Math.sin(cue.getAngle() - Math.toRadians(90));
 		//System.out.println(newXVel+"  "+newYVel+"  "+cue.getAngle()*(180/Math.PI));

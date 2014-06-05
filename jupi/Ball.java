@@ -7,7 +7,7 @@ import javax.swing.*;
  * Class defining a billiards ball.
  */
 
-public class Ball 
+public class Ball //extends Object implements Runnable
 {
     private Color color;
     private VectorDouble position,velocity;
@@ -15,6 +15,7 @@ public class Ball
     private boolean visible;
     private final  VectorDouble startPosition;
     private boolean currentBall;//used to track which ball is hit by cue
+    private boolean isHit;
 
     /**
      * Default constructor makes an odd-colored (blue) ball at position 0,0.
@@ -34,7 +35,8 @@ public class Ball
         this.mass   = mass;
         color       = c;
         visible = true;
-        currentBall = false;        
+        currentBall = false; 
+        isHit = false;
     }
 
     public Ball(double x, double y, Color c) 
@@ -105,6 +107,24 @@ public class Ball
     		this.setVelocity((this.getVelocity().getX()), (this.getVelocity().getY() * -1));    			
     	}
     }
+    
+    
+//============================================================================//
+/*    
+    public void run(){
+        
+        while(true){
+            try{
+                
+                Thread.sleep(10);
+            }catch(InterruptedException e){}
+            
+            //this.move();
+            repaint();
+        }
+    }
+*/    
+//============================================================================//
           
     public double getRadius()
     {
@@ -148,6 +168,14 @@ public class Ball
     public boolean isCurrentBall()
     {
     	return currentBall;
+    }
+    public void setIsHit(boolean isHit)
+    {
+    	this.isHit  = isHit;
+    }
+    public boolean isHit()
+    {
+    	return this.isHit;
     }
 
 }//Ball
