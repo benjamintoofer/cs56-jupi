@@ -18,18 +18,17 @@ public class CaromTable extends JPanel
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
-    private Ball currentBall, // current ball being played, can be white or yellow
-    			 otherBall;
-    boolean isWhitePlayer; //determines player's turn - True: white, False: Yellow
+    /** current ball being played, can be white or yellow*/
+    private Ball currentBall;
+    /** keeps track of the other ball which isn't played, can be yellow or white (is the opposite color of currentBall */
+    private Ball otherBall;  
     private BallPath path;
     private Cue cueStick;    
     
     private ArrayList<Ball> balls = new ArrayList<>();
     private Color felt, border, floor, edge, mark;
     int mouseX,mouseY;
-    boolean mouseDown,showCue;
-    boolean isRedHit = false; //checks if current ball has hit red ball
-    boolean isOtherBallHit = false; //checks if current ball has hit the other (not red) ball (i.e. Yellow or White)   
+    boolean mouseDown,showCue;     
     boolean isSwitchPlayers = false;
     Score wScore = new Score();
     int score = 0;//players score
@@ -62,8 +61,7 @@ public class CaromTable extends JPanel
         redball    = new Ball(dimTable[0] *2/3, dimTable[1] *2/5,radius,mass, BilliardsConstants.RED);
         yellowball = new Ball(dimTable[0] *2/3, dimTable[1] *3/5,radius,mass, BilliardsConstants.YELLOW);
         
-        currentBall = whiteball; //white starts first
-        //isWhitePlayer = true;
+        currentBall = whiteball; //white starts first        
         currentBall.setCurrentBall(true);
         otherBall = yellowball;
        
@@ -129,19 +127,16 @@ public class CaromTable extends JPanel
         drawBalls(g);   
         //Drawing cue stick         
         if(showCue)
-        {
-        	// -----------------------------------------------------------------------------
-        	//updateScore();
+        {        	
         	System.out.printf("Score = %d\n", score);
-        	//System.out.printf("SwitchPlayers = " + isSwitchPlayers + "\n");//testing
-        	
+                	
         	drawCue(g);
         }//if        
     }//paintComponent
 
 
     //--------------------------------------------------------------------------------
-    /* Drawing Table */
+    /** Drawing Table */
     //--------------------------------------------------------------------------------
     public void drawTable(Graphics g)
     {    	
@@ -350,13 +345,11 @@ public class CaromTable extends JPanel
     			if (Physics.checkBallCollision(ball1, ball2))
     			{//had a collision
     				if (ball1.isCurrentBall() == true)
-    				{ 
-    					//checkIfScored(ball2); 
+    				{     					 
     					ball2.setIsHit(true);
     				}
     				else if (ball2.isCurrentBall() == true)
-    				{    
-    					//checkIfScored(ball1);
+    				{        					
     					ball1.setIsHit(true);
     				}    				
     			}
@@ -376,72 +369,20 @@ public class CaromTable extends JPanel
     }
     
     
-    /*public void checkIfScored(Ball ball)
-    {
-    	if (ball == redball)
-		{
-			isRedHit = true;
-			System.out.print("Red Ball Hit!!!");
-		}    				
-		else if (ball == whiteball || ball == yellowball)
-		{//other ball hit (white or yellow, depending on which current ball is)
-			isOtherBallHit = true;
-			System.out.print("OtherBall Hit!!!");
-		}			    	
-    }*/
-    
-    
-  //==================================================================  
-/*    
-    public void updateScore()
-    {
-    	if (isRedHit && isOtherBallHit)
-    	{//same player keeps on playing
-    		score++;
-    		isSwitchPlayers = false;
-    		System.out.printf("\nScore = %d\n", score);
-    	}
-    	else //No score
-    	{    		
-    		//isSwitchPlayers= true;
-    		//if (isSwitchPlayers)
-    			//switchPlayers();
-    	}//else
-    	
-    	//reset:
-    	isRedHit = false;
-    	isOtherBallHit = false;
-    }//updateScore
-  */  
-    
     public void switchPlayers()
-    {    	
-	    	if (whiteball.isCurrentBall())
-				System.out.print(" Current Bal = WHITE ");
-			else if (yellowball.isCurrentBall())
-				System.out.print(" Current Bal = yellowball ");
-	    	
-			//switch players (balls)
-			if (whiteball.isCurrentBall())
-			{
-				whiteball.setCurrentBall(false);
-				yellowball.setCurrentBall(true);	    				
-				//currentBall.setCurrentBall(false);//change current ball	    				    				
-				currentBall = yellowball;
-				//currentBall.setCurrentBall(true);//new current ball	    				
-				//isWhitePlayer = false;    				
-			}
-			else//ball is yellow
-			{
-				whiteball.setCurrentBall(true);
-				yellowball.setCurrentBall(false);
-				//currentBall.setCurrentBall(false);//change current ball
-				currentBall = whiteball;
-				//currentBall.setCurrentBall(true);//new current ball
-				//isWhitePlayer = true;
-			}	
-			
-			//isSwitchPlayers = false; //reset
+    {	//switch players (balls)
+		if (whiteball.isCurrentBall())
+		{
+			whiteball.setCurrentBall(false);
+			yellowball.setCurrentBall(true);			
+			currentBall = yellowball;				    				
+		}
+		else//ball is yellow
+		{
+			whiteball.setCurrentBall(true);
+			yellowball.setCurrentBall(false);				
+			currentBall = whiteball;
+		}	
     }//switchPlayers
     
     
