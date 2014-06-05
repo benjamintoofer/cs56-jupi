@@ -7,12 +7,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.EventListener;
 
 /**
  * Class defining the billiards table and its aggregation of billiards balls.
  */
 
-public class CaromTable extends JPanel 
+public class CaromTable extends JPanel implements EventListener
 {
     private double[] dimTable, dimCushion, dimBorder, dimFloor;
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
@@ -97,6 +98,7 @@ public class CaromTable extends JPanel
         floor  = BilliardsConstants.FLOOR;
         edge   = BilliardsConstants.EDGE;
         mark   = BilliardsConstants.MARK;
+        
         
         this.addMouseListener(new MouseListener()
         {	@Override
