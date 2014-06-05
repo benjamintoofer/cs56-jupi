@@ -220,8 +220,8 @@ public class Physics
 	}
 	public static boolean checkInPocket(Ball b,Pocket p)
 	{
-		double dx = b.getPosition().x + (BilliardsConstants.BORDER_WIDTH+BilliardsConstants.CUSHION_WIDTH+BilliardsConstants.FLOOR_WIDTH)  - p.getPosition().x - p.getDiameter()/4 ;
-		double dy = b.getPosition().y + (BilliardsConstants.BORDER_WIDTH+BilliardsConstants.CUSHION_WIDTH+BilliardsConstants.FLOOR_WIDTH) - p.getPosition().y - p.getDiameter()/4 ;
+		double dx = b.getPosition().x + (BilliardsConstants.BORDER_WIDTH+BilliardsConstants.CUSHION_WIDTH+BilliardsConstants.FLOOR_WIDTH)  - (p.getPosition().x + p.getDiameter()/2) ;
+		double dy = b.getPosition().y + (BilliardsConstants.BORDER_WIDTH+BilliardsConstants.CUSHION_WIDTH+BilliardsConstants.FLOOR_WIDTH) - (p.getPosition().y + p.getDiameter()/2);
 		double distance = Math.sqrt(dx*dx + dy*dy);
 		//System.out.println(p.getDiameter()/2);
 		if(distance < (p.getDiameter()/2))

@@ -20,15 +20,16 @@ public class JupiTable extends JPanel
     private Ball whiteball, redball, yellowball,blueball,orangeball,greenball,blackball,purpleball;
     private BallPath path;
     private Cue cueStick;
+    //***************
+    private Score firstPlayerScore,secondPlayerScore,currentPlayerScore;
     
     //***************
     private Pocket pocketOne,pocketTwo,pocketThree,pocketFour;
     private ArrayList<Pocket> pockets = new ArrayList<>();
-    //************************
     private ArrayList<Ball> balls = new ArrayList<>();
-    private Color felt, border, floor, edge, mark;
-    int mouseX,mouseY;
-    boolean mouseDown,showCue;
+    private Color felt, border, floor, edge, mark,cueTip;
+    private int mouseX,mouseY;
+    private boolean mouseDown,showCue,turnBegin;
 
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -36,6 +37,9 @@ public class JupiTable extends JPanel
 
     public JupiTable() 
     {
+    	
+    	this.setLayout(null);
+    	ppi			   = BilliardsConstants.PIXELS_PER_INCH;
         borderCorner   = BilliardsConstants.BORDER_CORNER;
         borderWidth    = BilliardsConstants.BORDER_WIDTH;
         cushionWidth   = BilliardsConstants.CUSHION_WIDTH;
@@ -63,7 +67,13 @@ public class JupiTable extends JPanel
         greenball = new Ball(dimTable[0] *15/24, dimTable[1] *8/15,radius,mass, Color.GREEN);
         blackball = new Ball(dimTable[0] *17/24, dimTable[1] *8/15,radius,mass, Color.BLACK);
         path = new BallPath(whiteball.getPosition(),0,30);
-        
+        //******
+       
+        firstPlayerScore = new Score((dimTable[0]* 2/7)*ppi,(dimTable[1]* 1/15)*ppi,"Player1",this,Color.red);
+        secondPlayerScore = new Score((dimTable[0]* 5/7)*ppi,(dimTable[1]* 1/15)*ppi,"Player2",this,Color.blue);
+        currentPlayerScore = firstPlayerScore;
+       //*******
+        //this.add(firstPlayerLabel);
         balls.add(whiteball);
         balls.add(redball);
         balls.add(yellowball);
@@ -259,22 +269,14 @@ public class JupiTable extends JPanel
          * Pockets
          */
         //***************************************
-        
-        double dxx = whiteball.getPosition().x - pocketTwo.getPosition().x;
-        double dyy = whiteball.getPosition().y - pocketTwo.getPosition().y;
-        pocketTwo.draw(g);
-       
-        //System.out.println(Math.sqrt(dxx*dxx + dyy*dyy));
-        
-         
+      
          g.setColor(Color.BLACK);
  		 g.fillOval((int)(pocketOne.getPosition().x)*ppi,(int)( pocketOne.getPosition().y)*ppi,(int) pocketOne.getDiameter()*ppi,(int) pocketOne.getDiameter()*ppi);
  		 g.fillOval((int)(pocketTwo.getPosition().x)*ppi,(int)( pocketTwo.getPosition().y)*ppi,(int) pocketTwo.getDiameter()*ppi,(int) pocketTwo.getDiameter()*ppi);
  		 g.fillOval((int)(pocketThree.getPosition().x)*ppi,(int)( pocketThree.getPosition().y)*ppi,(int) pocketThree.getDiameter()*ppi,(int) pocketThree.getDiameter()*ppi);
  		 g.fillOval((int)(pocketFour.getPosition().x)*ppi,(int)( pocketFour.getPosition().y)*ppi,(int) pocketFour.getDiameter()*ppi,(int) pocketFour.getDiameter()*ppi);
- 		
+ 	
  		//***************************************
- 		//pocketOne.draw(g);
         /*
          * Drawing cue stick
          */
@@ -299,22 +301,29 @@ public class JupiTable extends JPanel
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi),
         					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi)};
-        	///
-        	 path.updateProp(whiteball.getPosition(), angle);
-        	 path.draw(g,cushionWidth,floorWidth,borderWidth);
+        	
+        	
+        	///Drawing Cue balls path
+        	path.updateProp(whiteball.getPosition(), angle);
+        	path.draw(g,cushionWidth,floorWidth,borderWidth);
         	///
              
         	AffineTransform transform = new AffineTransform();
+        	AffineTransform oldTransform;
         	transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
         	Graphics2D g2d = (Graphics2D)g;
+        	oldTransform = g2d.getTransform();
+        	
         	g2d.transform(transform);
-			g2d.setColor(Color.BLUE);
+			g2d.setColor(cueTip);
 			g2d.fillArc((int)(cueStick.getX()*ppi) , 
 				   (int)(cueStick.getY()*ppi),
 				   (int)(BilliardsConstants.CUE_DIAMETER*ppi) ,(int)(BilliardsConstants.CUE_DIAMETER*ppi) ,0 ,180);
 		
 			g2d.setColor(new Color(0xDBB84D));
 			g2d.fillPolygon(cuesX, cuesY, 4);
+			g2d.setTransform(oldTransform);
+
         }//Cue
        
         
@@ -371,13 +380,33 @@ public class JupiTable extends JPanel
 		//Check if balls are at rest
 		if(whiteball.getVelocity().x ==0 && whiteball.getVelocity().y == 0
 				&& yellowball.getVelocity().x == 0 && yellowball.getVelocity().y  == 0
-				&& redball.getVelocity().x == 0&& redball.getVelocity().y == 0)
+				&& redball.getVelocity().x == 0 && redball.getVelocity().y == 0
+				&& blueball.getVelocity().x == 0 && blueball.getVelocity().y == 0
+				&& blackball.getVelocity().x == 0 && blackball.getVelocity().y == 0
+				&& purpleball.getVelocity().x == 0 && purpleball.getVelocity().y == 0
+				&& orangeball.getVelocity().x == 0 && orangeball.getVelocity().y == 0)
 		{
+			
+			if(!currentPlayerScore.isScoreChanged() && turnBegin)
+			{
+				if(currentPlayerScore == firstPlayerScore)
+				{
+					currentPlayerScore = secondPlayerScore;
+					cueTip = Color.blue;
+				}else{
+					currentPlayerScore = firstPlayerScore;
+					cueTip = Color.red;
+				}
+				turnBegin = false;
+			}
 			showCue = true;
+			
 		}else
 		{
 			showCue = false;
+			turnBegin = true;
 		}
+		
     	//Update each ball
     	for(int i = 0; i < balls.size(); i++)
     	{
@@ -397,6 +426,8 @@ public class JupiTable extends JPanel
     			boolean ballIn = Physics.checkInPocket(balls.get(i),p);
     			if(ballIn)
     			{
+    				currentPlayerScore.increment();
+    				currentPlayerScore.setScoreChanged(true);
     				balls.remove(i);
     				break;
     			}
