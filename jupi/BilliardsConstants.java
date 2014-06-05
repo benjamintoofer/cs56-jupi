@@ -29,7 +29,7 @@ public interface BilliardsConstants
     /**The speed below which a ball will be stopped on the next timeslice. Units?
      * Should be > 0.  */
     double MINIMUM_SPEED = 0.02;
-    
+        
     
     
     //======================================
@@ -83,8 +83,11 @@ public interface BilliardsConstants
     // Table Constants:
     //======================================
     
+    /** Table Height - Table dimensions are proportional to height: width = height X 2*/
+    double TABLE_HEIGHT = 5;
+    
     /**{@code double} array containing the width and height, in inches, of the region which can contain balls. */
-    double[] TABLE_DIMENSION = new double[]{INCHES_PER_FOOT * 10, INCHES_PER_FOOT * 5};
+    double[] TABLE_DIMENSION = new double[]{INCHES_PER_FOOT * TABLE_HEIGHT * 2 , INCHES_PER_FOOT * TABLE_HEIGHT};
 
     /**Width, in inches, of the felt-covered region surrounding the table. The balls bump into the cushions.   */
     double CUSHION_WIDTH = 2;

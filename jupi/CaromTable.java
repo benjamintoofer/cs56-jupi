@@ -20,7 +20,7 @@ public class CaromTable extends JPanel implements EventListener
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
     private Ball currentBall, // current ball being played, can be white or yellow
-    			otherBall;
+    			 otherBall;
     boolean isWhitePlayer; //determines player's turn - True: white, False: Yellow
     private BallPath path;
     private Cue cueStick;    
@@ -32,7 +32,7 @@ public class CaromTable extends JPanel implements EventListener
     boolean isRedHit = false; //checks if current ball has hit red ball
     boolean isOtherBallHit = false; //checks if current ball has hit the other (not red) ball (i.e. Yellow or White)   
     boolean isSwitchPlayers = false;
-        
+    Score wScore = new Score();
     int score = 0;//players score
     
     /**
@@ -64,8 +64,9 @@ public class CaromTable extends JPanel implements EventListener
         yellowball = new Ball(dimTable[0] *2/3, dimTable[1] *3/5,radius,mass, BilliardsConstants.YELLOW);
         
         currentBall = whiteball; //white starts first
-        isWhitePlayer = true;
+        //isWhitePlayer = true;
         currentBall.setCurrentBall(true);
+        otherBall = yellowball;
        
         path = new BallPath(currentBall.getPosition(),0,30);
         
@@ -133,8 +134,8 @@ public class CaromTable extends JPanel implements EventListener
         {
         	// -----------------------------------------------------------------------------
         	//updateScore();
-        	//System.out.printf("Score = %d\n", score);
-        	System.out.printf("SwitchPlayers = " + isSwitchPlayers + "\n");//testing
+        	System.out.printf("Score = %d\n", score);
+        	//System.out.printf("SwitchPlayers = " + isSwitchPlayers + "\n");//testing
         	
         	drawCue(g);
         }//if        
@@ -280,8 +281,7 @@ public class CaromTable extends JPanel implements EventListener
 
     public void update()
     {
- 	
-    	//Mouse down even to hit ball
+    	//Mouse down even to hit ball    
 		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL && showCue)
 		{
 			pullDistance += BilliardsConstants.PULL_RATE;
@@ -292,11 +292,14 @@ public class CaromTable extends JPanel implements EventListener
 			pullDistance -= 3; 
 		}
 		if(pullDistance < 0)
-		{
-			//Physics.hitBall(cueStick,whiteball);
+		{//cue will hit ball
 			Physics.hitBall(cueStick,currentBall);
 			pullDistance = 0;
-			//isSwitchPlayers = true; //reset 
+			
+			isSwitchPlayers = true; //reset 
+			wScore.setScoreChanged(false);//reset
+			redball.setIsHit(false);//reset
+			otherBall.setIsHit(false);//reset
 		}
 		
 		//Check if balls are at rest
@@ -311,21 +314,24 @@ public class CaromTable extends JPanel implements EventListener
     		
     		if(redball.isHit() && otherBall.isHit())
     		{
-    			score++;
-    			isSwitchPlayers = false;
-    			
-    		}else{
-    			isSwitchPlayers = true;
+    			wScore.increment();
+    			score++;//will be replaced by Score class
+    			isSwitchPlayers = false; //reset
+    			redball.setIsHit(false);//reset
+    			otherBall.setIsHit(false);//reset
+    		}else
+    		{    	
+    			wScore.setScoreChanged(false);    			
     		}
 			showCue = true;			
-//*		
+
 //-------------------------------------------------------------------			
-		    if (isSwitchPlayers)			
+		    if (isSwitchPlayers && !wScore.isScoreChanged())			
 		    {
 		    	switchPlayers();	
+		    	isSwitchPlayers = false; //reset		    	
     		}//if
 //-------------------------------------------------------------------
-//*/
 		}
 		else
 		{
@@ -335,7 +341,6 @@ public class CaromTable extends JPanel implements EventListener
     	//Update each ball
     	for(int i = 0; i < balls.size(); i++)
     	{
-    	
     		Physics.checkCusionCollision(balls.get(i), this);
     		
     		Ball ball1, ball2;
@@ -389,6 +394,7 @@ public class CaromTable extends JPanel implements EventListener
     
     
   //==================================================================  
+/*    
     public void updateScore()
     {
     	if (isRedHit && isOtherBallHit)
@@ -408,7 +414,7 @@ public class CaromTable extends JPanel implements EventListener
     	isRedHit = false;
     	isOtherBallHit = false;
     }//updateScore
-    
+  */  
     
     public void switchPlayers()
     {    	
@@ -437,7 +443,7 @@ public class CaromTable extends JPanel implements EventListener
 				//isWhitePlayer = true;
 			}	
 			
-			isSwitchPlayers = false; //reset
+			//isSwitchPlayers = false; //reset
     }//switchPlayers
     
     
