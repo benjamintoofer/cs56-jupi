@@ -29,9 +29,16 @@ public class CaromTable extends JPanel
     private Color felt, border, floor, edge, mark;
     int mouseX,mouseY;
     boolean mouseDown,showCue;     
-    boolean isSwitchPlayers = false;
-    Score wScore = new Score();
+    boolean isSwitchPlayers = false;        
+    /**Keeps track of white player's score*/
+    Score whiteScore;
+    /**Keeps track of yellow player's score*/
+    Score yellowScore;
+    /**Keeps track of current player's score (white or yellow)*/
+    Score currentScore;
     int score = 0;//players score
+    
+    JLabel scoreDisplay;
     
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -74,6 +81,16 @@ public class CaromTable extends JPanel
         whiteball.setVelocity(0,0);
         redball.setVelocity(0,0);
         yellowball.setVelocity(0,0);
+                
+        whiteScore   = new Score();
+        yellowScore  = new Score();
+        currentScore = new Score();
+        currentScore = whiteScore; //white starts first  
+        
+        
+        scoreDisplay = new JLabel();//testing
+        this.add(scoreDisplay);
+        scoreDisplay.setText("Score = __");
         
         felt   = BilliardsConstants.FELT;
         border = BilliardsConstants.BORDER;
@@ -129,6 +146,8 @@ public class CaromTable extends JPanel
         if(showCue)
         {        	
         	System.out.printf("Score = %d\n", score);
+        	String display = "TScr= "+score+" W = "+whiteScore.getScore()+" Y = "+yellowScore.getScore();
+        	scoreDisplay.setText(display);
                 	
         	drawCue(g);
         }//if        
@@ -289,10 +308,12 @@ public class CaromTable extends JPanel
 			Physics.hitBall(cueStick,currentBall);
 			pullDistance = 0;
 			
-			isSwitchPlayers = true; //reset 
-			wScore.setScoreChanged(false);//reset
-			redball.setIsHit(false);//reset
-			otherBall.setIsHit(false);//reset
+			isSwitchPlayers = true; //reset 			
+			currentScore.setScoreChanged(false);//reset			
+			
+			redball.setIsHit(false);//reset			
+			whiteball.setIsHit(false);//reset
+			yellowball.setIsHit(false);//reset
 		}
 		
 		//Check if balls are at rest
@@ -301,25 +322,26 @@ public class CaromTable extends JPanel
     		if(currentBall == whiteball)
     		{
     			otherBall = yellowball;
-    		}else{
+    		}else
+    		{
     			otherBall = whiteball;
     		}
     		
     		if(redball.isHit() && otherBall.isHit())
-    		{
-    			wScore.increment();
+    		{    		
+    			currentScore.increment();//score updated (flag set internally)
     			score++;//will be replaced by Score class
     			isSwitchPlayers = false; //reset
     			redball.setIsHit(false);//reset
     			otherBall.setIsHit(false);//reset
     		}else
-    		{    	
-    			wScore.setScoreChanged(false);    			
+    		{     			
+    			currentScore.setScoreChanged(false);
     		}
 			showCue = true;			
 
-//-------------------------------------------------------------------			
-		    if (isSwitchPlayers && !wScore.isScoreChanged())			
+//-------------------------------------------------------------------
+			if (isSwitchPlayers && !currentScore.isScoreChanged())
 		    {
 		    	switchPlayers();	
 		    	isSwitchPlayers = false; //reset		    	
@@ -375,13 +397,17 @@ public class CaromTable extends JPanel
 		{
 			whiteball.setCurrentBall(false);
 			yellowball.setCurrentBall(true);			
-			currentBall = yellowball;				    				
+			currentBall = yellowball;	
+			
+			currentScore = yellowScore;
 		}
 		else//ball is yellow
 		{
 			whiteball.setCurrentBall(true);
 			yellowball.setCurrentBall(false);				
 			currentBall = whiteball;
+			
+			currentScore = whiteScore;
 		}	
     }//switchPlayers
     
