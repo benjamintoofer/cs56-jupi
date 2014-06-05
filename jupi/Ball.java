@@ -7,7 +7,7 @@ import javax.swing.*;
  * Class defining a billiards ball.
  */
 
-public class Ball //extends Object implements Runnable
+public class Ball
 {
     private Color color;
     private VectorDouble position,velocity;
@@ -107,24 +107,7 @@ public class Ball //extends Object implements Runnable
     		this.setVelocity((this.getVelocity().getX()), (this.getVelocity().getY() * -1));    			
     	}
     }
-    
-    
-//============================================================================//
-/*    
-    public void run(){
         
-        while(true){
-            try{
-                
-                Thread.sleep(10);
-            }catch(InterruptedException e){}
-            
-            //this.move();
-            repaint();
-        }
-    }
-*/    
-//============================================================================//
           
     public double getRadius()
     {
