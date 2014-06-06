@@ -143,7 +143,7 @@ public class JupiTable extends JPanel
 
 
     @Override
-    protected void paintComponent(Graphics g) 
+   protected void paintComponent(Graphics g) 
     {
         super.paintComponent(g);
         int x, y, width, height;

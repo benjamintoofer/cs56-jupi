@@ -46,6 +46,8 @@ public class CaromTable extends JPanel
 
     public CaromTable() 
     {
+    	
+    	ppi 		   = BilliardsConstants.PIXELS_PER_INCH;
         borderCorner   = BilliardsConstants.BORDER_CORNER;
         borderWidth    = BilliardsConstants.BORDER_WIDTH;
         cushionWidth   = BilliardsConstants.CUSHION_WIDTH;
@@ -117,7 +119,7 @@ public class CaromTable extends JPanel
 			public void mouseExited(MouseEvent e) {}
         	
         });
-        
+        this.setLayout(null);
         this.addMouseMotionListener(new MouseMotionListener()
         {
         	public void mouseMoved(MouseEvent e)
