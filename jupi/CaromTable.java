@@ -135,11 +135,16 @@ public class CaromTable extends JPanel
     @Override
     protected void paintComponent(Graphics g) 
     {
-    	int xCenter = getWidth() / 2;
-        int yCenter = getHeight() / 2;    
+    	//int xCenter = getWidth() / 2;
+        //int yCenter = getHeight() / 2;
+    	//int innerTableEdgeX =  xCenter - (int)((dimTable[0]/2) * ppi);  
+    	//int innerTableEdgeY =  yCenter - (int)((dimTable[1]/2) * ppi);
+    	//Coordinates for center of window
+    	double xCenter = getWidth() / 2;
+    	double yCenter = getHeight() / 2;
         
-    	int innerTableEdgeX =  xCenter - (int)((dimTable[0]/2) * ppi);  
-    	int innerTableEdgeY =  yCenter - (int)((dimTable[1]/2) * ppi); 
+    	double innerTableEdgeX =  xCenter - ((dimTable[0]/2) * ppi);  
+    	double innerTableEdgeY =  yCenter - ((dimTable[1]/2) * ppi); 
     	
         super.paintComponent(g);        
         drawTable(g);
@@ -160,23 +165,23 @@ public class CaromTable extends JPanel
     public void drawTable(Graphics g)
     {    	
     	//Coordinates for center of window
-    	int xCenter = getWidth() / 2;
-        int yCenter = getHeight() / 2;        
+    	double xCenter = getWidth() / 2;
+    	double yCenter = getHeight() / 2;        
     	/**Coordinates of outer top-left edge of table, relative to center of window */
-    	int outterTableX    = xCenter  - (int)((dimTable[0]/2 + cushionWidth + borderWidth)* ppi);    	
-    	int outterTableY    = yCenter  - (int)((dimTable[1]/2 + cushionWidth + borderWidth)* ppi);
+    	double outterTableX    = xCenter  - ((dimTable[0]/2 + cushionWidth + borderWidth)* ppi);    	
+    	double outterTableY    = yCenter  - ((dimTable[1]/2 + cushionWidth + borderWidth)* ppi);
     	
-    	int cushionEdgeX    = outterTableX +  (int)(borderWidth * ppi);
-    	int cushionEdgeY    = outterTableY +  (int)(borderWidth * ppi);
+    	double cushionEdgeX    = outterTableX +  (borderWidth * ppi);
+    	double cushionEdgeY    = outterTableY +  (borderWidth * ppi);
     	
-    	int innerTableEdgeX =  xCenter - (int)((dimTable[0]/2) * ppi);  
-    	int innerTableEdgeY =  yCenter - (int)((dimTable[1]/2) * ppi); 
+    	double innerTableEdgeX =  xCenter - ((dimTable[0]/2) * ppi);  
+    	double innerTableEdgeY =  yCenter - ((dimTable[1]/2) * ppi); 
  /*  
         int cushionEdge = (int) ((floorWidth + borderWidth) * ppi);    	
         int tableEdge   = (int) ((floorWidth + borderWidth + cushionWidth) * ppi);
  */ 
-    	int cushionEdge = outterTableX -  (int)(cushionWidth * ppi);
-    	int tableEdge   = xCenter - (int)((dimTable[0]/2 )* ppi);  
+    	//int cushionEdge = outterTableX -  (int)(cushionWidth * ppi);
+    	//int tableEdge   = xCenter - (int)((dimTable[0]/2 )* ppi);  
     	
     /*Not needed, background filled in constructor    	
         // draw a filled rectangle for the floor surrounding the table border  
@@ -191,7 +196,7 @@ public class CaromTable extends JPanel
                 		(int)(dimBorder[0] * ppi), (int)(dimBorder[1] * ppi),
                 		(int)(borderCorner * ppi), (int)(borderCorner * ppi));
          */
-        g.fillRoundRect(outterTableX, outterTableY,
+        g.fillRoundRect((int)outterTableX, (int)outterTableY,
                 		(int)(dimBorder[0] * ppi), (int)(dimBorder[1] * ppi),
                 		(int)(borderCorner * ppi), (int)(borderCorner * ppi));
 
@@ -204,7 +209,7 @@ public class CaromTable extends JPanel
                    (int)(dimCushion[0] * ppi),
                    (int)(dimCushion[1] * ppi));
         */
-        g.fillRect(cushionEdgeX, cushionEdgeY,
+        g.fillRect((int)cushionEdgeX, (int)cushionEdgeY,
                    (int)(dimCushion[0] * ppi),
                    (int)(dimCushion[1] * ppi));
 
@@ -216,7 +221,7 @@ public class CaromTable extends JPanel
                    (int)(dimTable[0] * ppi),
                    (int)(dimTable[1] * ppi));
 */        
-        g.drawRect(innerTableEdgeX, innerTableEdgeY,
+        g.drawRect((int)innerTableEdgeX, (int)innerTableEdgeY,
                    (int)(dimTable[0] * ppi),
                    (int)(dimTable[1] * ppi));        
         
@@ -231,11 +236,11 @@ public class CaromTable extends JPanel
         g.drawLine(cushionEdge + (int)dimCushion[0] * ppi, cushionEdge + (int)dimCushion[1] * ppi,
                    tableEdge + (int)dimTable[0] * ppi, tableEdge + (int)dimTable[1] * ppi);
 */
-        g.drawLine(cushionEdgeX, cushionEdgeY, innerTableEdgeX, innerTableEdgeY);
-        g.drawLine(cushionEdgeX + (int)dimCushion[0] * ppi, cushionEdgeY, innerTableEdgeX + (int)dimTable[0] * ppi, innerTableEdgeY);
-        g.drawLine(cushionEdgeX, cushionEdgeY + (int)dimCushion[1] * ppi, innerTableEdgeX, innerTableEdgeY + (int) dimTable[1] * ppi);                
-        g.drawLine(cushionEdgeX + (int)dimCushion[0] * ppi, cushionEdgeY + (int)dimCushion[1] * ppi,
-        		   innerTableEdgeX + (int)dimTable[0] * ppi, innerTableEdgeY + (int)dimTable[1] * ppi);
+        g.drawLine((int)cushionEdgeX, (int)cushionEdgeY, (int)innerTableEdgeX, (int)innerTableEdgeY);
+        g.drawLine((int)cushionEdgeX + (int)dimCushion[0] * ppi, (int)cushionEdgeY, (int)innerTableEdgeX + (int)dimTable[0] * ppi, (int)innerTableEdgeY);
+        g.drawLine((int)cushionEdgeX, (int)cushionEdgeY + (int)dimCushion[1] * ppi, (int)innerTableEdgeX, (int)innerTableEdgeY + (int) dimTable[1] * ppi);                
+        g.drawLine((int)cushionEdgeX + (int)dimCushion[0] * ppi, (int)cushionEdgeY + (int)dimCushion[1] * ppi,
+        		(int)innerTableEdgeX + (int)dimTable[0] * ppi, (int)innerTableEdgeY + (int)dimTable[1] * ppi);
         
                 
         /* draw filled circles to mark the edges */
@@ -296,7 +301,8 @@ public class CaromTable extends JPanel
     //--------------------------------------------------------------------------------
     /* Drawing Balls */
     //--------------------------------------------------------------------------------
-    public void drawBalls(Graphics g, int innerTableEdgeX, int innerTableEdgeY)
+    //public void drawBalls(Graphics g, int innerTableEdgeX, int innerTableEdgeY)
+    public void drawBalls(Graphics g, double innerTableEdgeX, double innerTableEdgeY)
     {        
     	int x, y, width, height;    	
     	width  = (int)(2*radius*ppi);
@@ -308,8 +314,8 @@ public class CaromTable extends JPanel
         	x = (int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi);
         	y = (int)((floorWidth + borderWidth + cushionWidth + b.getPosition().y-radius) * ppi);
 */        	
-        	x = innerTableEdgeX + (int)((b.getPosition().x-radius) * ppi);
-        	y = innerTableEdgeY + (int)((b.getPosition().y-radius) * ppi);
+        	x = (int)innerTableEdgeX + (int)((b.getPosition().x-radius) * ppi);
+        	y = (int)innerTableEdgeY + (int)((b.getPosition().y-radius) * ppi);
         	
         	// draw a filled circle for each ball 
             g.setColor(b.getColor());
@@ -324,7 +330,7 @@ public class CaromTable extends JPanel
     //--------------------------------------------------------------------------------
     /* Drawing Cue Stick */
     //--------------------------------------------------------------------------------
-    public void drawCue(Graphics g, int innerTableEdgeX, int innerTableEdgeY)
+    public void drawCue(Graphics g, double innerTableEdgeX, double innerTableEdgeY)
     {
 /*    	
     	double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+currentBall.getPosition().x) * ppi);
