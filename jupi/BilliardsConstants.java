@@ -18,8 +18,8 @@ public interface BilliardsConstants
     //======================================
     
     /**Simulated time, in milliseconds, between updating the world state. */
-    int TIME_SLICE = 30;
-    //int TIME_SLICE = 15;
+    //int TIME_SLICE = 30;
+    int TIME_SLICE = 15;
     
     /**The number by which ball speeds are multiplied every timeslice to yield speed on next timeslice.
      * Should be within the interval [0, 1).  */
@@ -76,6 +76,10 @@ public interface BilliardsConstants
     
     /**Maximum distance of pull  */
     double MAX_PULL = 10;
+    
+    
+    /**Default colors for the Cue  [Gold-LightBrown-Yellowish]  */
+    Color CUE_COLOR = new Color(0xDBB84D);
         
     
     

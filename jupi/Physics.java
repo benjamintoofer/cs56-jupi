@@ -6,10 +6,10 @@ import javax.swing.*;
 
 public class Physics 
 {	
-	private static int  ppi = BilliardsConstants.PIXELS_PER_INCH;	
+	//private static int  ppi = BilliardsConstants.PIXELS_PER_INCH;	
 	
-	private static boolean isRedHit = false;//checks if current ball has hit red ball    
-	private static boolean isOtherBallHit = false; //checks if current ball has hit the other (not red) ball (i.e. Yellow or White)    
+	//private static boolean isRedHit = false;//checks if current ball has hit red ball    
+	//private static boolean isOtherBallHit = false; //checks if current ball has hit the other (not red) ball (i.e. Yellow or White)    
 	
 	public static void checkCusionCollision(Ball ball,CaromTable table)
 	{
@@ -20,7 +20,7 @@ public class Physics
 		double leftCushion   = 0, 
 			   topCushion    = 0;
 		double bottomCushion = table.getTableHeight();
-		double pocketGap = 2;
+		//double pocketGap = 2;
 		
 		
 		//Collision with left wall
@@ -94,7 +94,7 @@ public class Physics
 		
 	}//checkCusionCollision
 	
-	//public static void checkBallCollision(Ball ball1, Ball ball2)
+	
 	public static boolean checkBallCollision(Ball ball1, Ball ball2)
 	{
 		//Check if balls collide
