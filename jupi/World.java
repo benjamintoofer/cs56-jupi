@@ -37,8 +37,8 @@ public class World extends JApplet
     	if (world != null)
     		throw new RuntimeException();
         int pixelsPerInch = BilliardsConstants.PIXELS_PER_INCH;
-        //final CaromTable table = new CaromTable();
-        final JupiTable table = new JupiTable();
+        final CaromTable table = new CaromTable();
+        //final JupiTable table = new JupiTable();
         table.setPixelsPerInch(pixelsPerInch);
         this.add(table);
         
