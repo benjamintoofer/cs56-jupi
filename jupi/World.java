@@ -18,9 +18,14 @@ public class World extends JApplet
         frame.add(applet);
         frame.setTitle("Jupi: Carom Billiards");
         frame.pack();
-        frame.setMinimumSize(frame.getSize());
+        //frame.setMinimumSize(frame.getSize());
+        frame.setSize((int)(BilliardsConstants.TOTAL_FLOOR_DIMENSION[0] * BilliardsConstants.PIXELS_PER_INCH), 
+        		      (int)(BilliardsConstants.TOTAL_FLOOR_DIMENSION[1] * BilliardsConstants.PIXELS_PER_INCH)); //testing----------
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+        
+        //frame.setResizable(false);//testing---------------
+        
         frame.setVisible(true);
     }//main
 

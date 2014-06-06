@@ -5,11 +5,9 @@ import java.awt.Graphics;
 
 public class BallPath 
 {
-
 	private double angle,dx,dy,distance;
 	private VectorDouble startPoint,endPoint;
 	private int ppi = BilliardsConstants.PIXELS_PER_INCH;	
-	
 	
 	public BallPath(VectorDouble ballPosition,double angle,double distance)
 	{
@@ -27,12 +25,21 @@ public class BallPath
 		this.dx = -distance * Math.cos(angle + Math.toRadians(90));
 		this.dy = -distance * Math.sin(angle + Math.toRadians(90));
 		this.startPoint = ballPosition;
+	}	
+	
+	
+	public void draw(Graphics g, double cushion, double floor, double border)
+	{
+		double totalWidth = cushion+floor+border;
+		draw(g, totalWidth * ppi , totalWidth * ppi);
 	}
 	
-	public void draw(Graphics g,double cushion,double floor,double border)
-	{
+	
+	//public void draw(Graphics g,double cushion,double floor,double border)
+	public void draw(Graphics g,  double innerTableEdgeX, double innerTableEdgeY)
+	{		
 		double firstPath,secondPath;
-		double totalWidth = cushion+floor+border;		
+		//double totalWidth = cushion+floor+border;		
 		
 		g.setColor(Color.RED);		
 		
@@ -43,16 +50,12 @@ public class BallPath
 			double y =  (dy * i/18);
 			double x =  (dx * i/18);
 			double overlapX = Physics.checkXPath((startPoint.x + x));
-			double overlapY = Physics.checkYPath((startPoint.y + y));
+			double overlapY = Physics.checkYPath((startPoint.y + y));			
 			
-			
-			g.fillOval((int)((startPoint.x + totalWidth+ x + overlapX)*ppi) - 4,(int)((startPoint.y +totalWidth+ y + overlapY)*ppi) - 4, 8, 8);
+			//g.fillOval((int)((startPoint.x + totalWidth+ x + overlapX)*ppi) - 4,(int)((startPoint.y +totalWidth+ y + overlapY)*ppi) - 4, 8, 8);
+			g.fillOval((int)((startPoint.x + innerTableEdgeX/ppi + x + overlapX)*ppi) - 4,
+					   (int)((startPoint.y +innerTableEdgeY/ppi + y + overlapY)*ppi) - 4, 8, 8);
 		}
-		
-		
-
 	}
-	
-
 	
 }

@@ -104,6 +104,10 @@ public interface BilliardsConstants
     /**Width, in inches, of the empty space surrounding the table and cushions.  */
     double FLOOR_WIDTH = 12;
     
+    /**Array containing total width and height of the whole floor area, i.e. the window size*/
+    double[] TOTAL_FLOOR_DIMENSION = new double[]{2*(FLOOR_WIDTH+BORDER_WIDTH+CUSHION_WIDTH) + TABLE_DIMENSION[0] , 
+    		                                      2*(FLOOR_WIDTH+BORDER_WIDTH+CUSHION_WIDTH) + TABLE_DIMENSION[1]};
+    
 
     /**Default colors of the table felt, including both play area and cushions. [Green]  */
     Color FELT = new Color(0x008800);
