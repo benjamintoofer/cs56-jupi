@@ -113,6 +113,8 @@ public class Physics
 			double sin = Math.sin(angle);
 			double cos = Math.cos(angle);
 			
+			ball2.setPosition(ball1.getPosition().x + dx, ball1.getPosition().y + dy);
+			
 			//Rotate ball1 and ball2 position
 			VectorDouble pos1 = new VectorDouble(0,0);
 			VectorDouble pos2 = rotate(dx,dy,sin,cos,true);
