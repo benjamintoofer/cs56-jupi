@@ -46,6 +46,7 @@ public class CaromTable extends JPanel
 
     public CaromTable() 
     {
+    	ppi 		   = BilliardsConstants.PIXELS_PER_INCH;
         borderCorner   = BilliardsConstants.BORDER_CORNER;
         borderWidth    = BilliardsConstants.BORDER_WIDTH;
         cushionWidth   = BilliardsConstants.CUSHION_WIDTH;
@@ -82,8 +83,9 @@ public class CaromTable extends JPanel
         redball.setVelocity(0,0);
         yellowball.setVelocity(0,0);            
         
-        whiteScore   = new Score((dimTable[0]* 2/7)*ppi,(dimTable[1]* 1/15)*ppi,"White",this, Color.WHITE);
-        yellowScore  = new Score((dimTable[0]* 5/7)*ppi,(dimTable[1]* 1/15)*ppi," Yellow",this, Color.YELLOW);
+        whiteScore   = new Score((dimTable[0]* 2/7)*ppi,(dimTable[1]* 1/15)*ppi,"Player1",this, Color.WHITE);
+        yellowScore  = new Score((dimTable[0]* 5/7)*ppi,(dimTable[1]* 1/15)*ppi,"Player2",this, Color.YELLOW);
+        
         currentScore = whiteScore; //white starts first  
        
         felt   = BilliardsConstants.FELT;
@@ -91,6 +93,8 @@ public class CaromTable extends JPanel
         floor  = BilliardsConstants.FLOOR;
         edge   = BilliardsConstants.EDGE;
         mark   = BilliardsConstants.MARK;
+        
+        this.setLayout(null);//done in order to position score labels correctly
         
         this.setBackground(floor);//Set floor color
         
@@ -134,11 +138,7 @@ public class CaromTable extends JPanel
 
     @Override
     protected void paintComponent(Graphics g) 
-    {
-    	//int xCenter = getWidth() / 2;
-        //int yCenter = getHeight() / 2;
-    	//int innerTableEdgeX =  xCenter - (int)((dimTable[0]/2) * ppi);  
-    	//int innerTableEdgeY =  yCenter - (int)((dimTable[1]/2) * ppi);
+    {    	
     	//Coordinates for center of window
     	double xCenter = getWidth() / 2;
     	double yCenter = getHeight() / 2;
@@ -147,12 +147,12 @@ public class CaromTable extends JPanel
     	double innerTableEdgeY =  yCenter - ((dimTable[1]/2) * ppi); 
     	
         super.paintComponent(g);        
-        drawTable(g);
+        drawTable(g, innerTableEdgeX, innerTableEdgeY);
         drawBalls(g, innerTableEdgeX, innerTableEdgeY);   
         //Drawing cue stick         
         if(showCue)
         {        	
-        	System.out.printf("Score = %d\n", score);        	
+        	//System.out.printf("Score = %d\n", score);        	
         	    	
         	drawCue(g, innerTableEdgeX, innerTableEdgeY);
         }//if        
@@ -162,80 +162,37 @@ public class CaromTable extends JPanel
     //--------------------------------------------------------------------------------
     /** Drawing Table */
     //--------------------------------------------------------------------------------
-    public void drawTable(Graphics g)
-    {    	
-    	//Coordinates for center of window
-    	double xCenter = getWidth() / 2;
-    	double yCenter = getHeight() / 2;        
-    	/**Coordinates of outer top-left edge of table, relative to center of window */
-    	double outterTableX    = xCenter  - ((dimTable[0]/2 + cushionWidth + borderWidth)* ppi);    	
-    	double outterTableY    = yCenter  - ((dimTable[1]/2 + cushionWidth + borderWidth)* ppi);
+    public void drawTable(Graphics g, double innerTableEdgeX, double innerTableEdgeY)
+    {   
+    	double cushionEdgeX    = innerTableEdgeX - cushionWidth *ppi;
+    	double cushionEdgeY    = innerTableEdgeY - cushionWidth *ppi;
     	
-    	double cushionEdgeX    = outterTableX +  (borderWidth * ppi);
-    	double cushionEdgeY    = outterTableY +  (borderWidth * ppi);
-    	
-    	double innerTableEdgeX =  xCenter - ((dimTable[0]/2) * ppi);  
-    	double innerTableEdgeY =  yCenter - ((dimTable[1]/2) * ppi); 
- /*  
-        int cushionEdge = (int) ((floorWidth + borderWidth) * ppi);    	
-        int tableEdge   = (int) ((floorWidth + borderWidth + cushionWidth) * ppi);
- */ 
-    	//int cushionEdge = outterTableX -  (int)(cushionWidth * ppi);
-    	//int tableEdge   = xCenter - (int)((dimTable[0]/2 )* ppi);  
-    	
-    /*Not needed, background filled in constructor    	
-        // draw a filled rectangle for the floor surrounding the table border  
-        g.setColor(floor);        
-        g.fillRect(0, 0, (int)(dimFloor[0] * ppi), (int)(dimFloor[1] * ppi));
-    */
+    	double outterTableX    = cushionEdgeX - borderWidth* ppi;
+    	double outterTableY    = cushionEdgeY - borderWidth* ppi;
+ 
     	
         /* draw a filled round rect for the rail border surrounding the cushions */
-        g.setColor(border);
-        /*
-        g.fillRoundRect((int)(floorWidth * ppi)  , (int)(floorWidth * ppi),
-                		(int)(dimBorder[0] * ppi), (int)(dimBorder[1] * ppi),
-                		(int)(borderCorner * ppi), (int)(borderCorner * ppi));
-         */
+        g.setColor(border);        
         g.fillRoundRect((int)outterTableX, (int)outterTableY,
                 		(int)(dimBorder[0] * ppi), (int)(dimBorder[1] * ppi),
                 		(int)(borderCorner * ppi), (int)(borderCorner * ppi));
 
-        
-        
+                
         /* draw a filled rectangle for the play area plus the cushions */
-        g.setColor(felt);
-        /*
-        g.fillRect(cushionEdge, cushionEdge,
-                   (int)(dimCushion[0] * ppi),
-                   (int)(dimCushion[1] * ppi));
-        */
+        g.setColor(felt);        
         g.fillRect((int)cushionEdgeX, (int)cushionEdgeY,
                    (int)(dimCushion[0] * ppi),
                    (int)(dimCushion[1] * ppi));
 
         
         /* draw a rectangle outline for the play area */
-        g.setColor(edge);
-/*       
-        g.drawRect(tableEdge, tableEdge,
-                   (int)(dimTable[0] * ppi),
-                   (int)(dimTable[1] * ppi));
-*/        
+        g.setColor(edge);        
         g.drawRect((int)innerTableEdgeX, (int)innerTableEdgeY,
                    (int)(dimTable[0] * ppi),
                    (int)(dimTable[1] * ppi));        
         
                
         /* draw a line segment connecting the play field corners to each border corner */
-/*        
-        g.drawLine(cushionEdge, cushionEdge, tableEdge, tableEdge);
-        g.drawLine(cushionEdge + (int)dimCushion[0] * ppi, cushionEdge,
-                   tableEdge + (int)dimTable[0] * ppi, tableEdge);
-        g.drawLine(cushionEdge, cushionEdge + (int)dimCushion[1] * ppi,
-                   tableEdge, tableEdge + (int) dimTable[1] * ppi);
-        g.drawLine(cushionEdge + (int)dimCushion[0] * ppi, cushionEdge + (int)dimCushion[1] * ppi,
-                   tableEdge + (int)dimTable[0] * ppi, tableEdge + (int)dimTable[1] * ppi);
-*/
         g.drawLine((int)cushionEdgeX, (int)cushionEdgeY, (int)innerTableEdgeX, (int)innerTableEdgeY);
         g.drawLine((int)cushionEdgeX + (int)dimCushion[0] * ppi, (int)cushionEdgeY, (int)innerTableEdgeX + (int)dimTable[0] * ppi, (int)innerTableEdgeY);
         g.drawLine((int)cushionEdgeX, (int)cushionEdgeY + (int)dimCushion[1] * ppi, (int)innerTableEdgeX, (int)innerTableEdgeY + (int) dimTable[1] * ppi);                
@@ -252,21 +209,11 @@ public class CaromTable extends JPanel
         for (int i = 0; i <= marks; i++) 
         {   
         	//Top border markers:
-/*        	
-        	g.fillOval((int)(cushionEdge + (cushionWidth/2 + i*dimTable[0]/marks )*ppi),        			   
-        			   (int)(cushionEdge - markRadius - borderWidth/2),
-        			   markRadius, markRadius);
-*/
         	g.fillOval((int)(cushionEdgeX + (cushionWidth/2 + i*dimTable[0]/marks )*ppi),        			   
      			       (int)(cushionEdgeY - markRadius - borderWidth/2),
      			       markRadius, markRadius);
         	
-            //Bottom border markers:    
-/*        	
-            g.fillOval((int)(cushionEdge + (cushionWidth/2 + i*dimTable[0]/marks )*ppi),
-            		   (int)(cushionEdge + (dimTable[1] + 2*cushionWidth)* ppi + borderWidth/2),                      
-            		   markRadius, markRadius);
-*/            		   
+            //Bottom border markers:
         	g.fillOval((int)(cushionEdgeX + (cushionWidth/2 + i*dimTable[0]/marks )*ppi),
          		   	   (int)(cushionEdgeY + (dimTable[1] + 2*cushionWidth)* ppi + borderWidth/2),                      
          		   	   markRadius, markRadius);
@@ -275,22 +222,11 @@ public class CaromTable extends JPanel
         for (int i = 1; i <= sideMarks; i++) 
         {
         	//Left border markers:
-/*        	
-        	g.fillOval((int)(cushionEdge - markRadius - borderWidth/2),        			   
-     			       (int)(cushionEdge + (i*dimTable[1]/(sideMarks+1))*ppi),
-     			       markRadius, markRadius);
-*/
-        	
         	g.fillOval((int)(cushionEdgeX - markRadius - borderWidth/2),        			   
      			       (int)(cushionEdgeY + (i*dimTable[1]/(sideMarks+1))*ppi),
      			       markRadius, markRadius);
         	
         	//Right border markers:
-/*        	
-        	g.fillOval((int)(cushionEdge + (2*cushionWidth + dimTable[0])*ppi + borderWidth/2),        			   
-  			       	   (int)(cushionEdge + (i*dimTable[1]/(sideMarks+1))*ppi),
-  			           markRadius, markRadius);
-*/
           	g.fillOval((int)(cushionEdgeX + (2*cushionWidth + dimTable[0])*ppi + borderWidth/2),        			   
 			       	   (int)(cushionEdgeY + (i*dimTable[1]/(sideMarks+1))*ppi),
 			           markRadius, markRadius);
@@ -301,7 +237,6 @@ public class CaromTable extends JPanel
     //--------------------------------------------------------------------------------
     /* Drawing Balls */
     //--------------------------------------------------------------------------------
-    //public void drawBalls(Graphics g, int innerTableEdgeX, int innerTableEdgeY)
     public void drawBalls(Graphics g, double innerTableEdgeX, double innerTableEdgeY)
     {        
     	int x, y, width, height;    	
@@ -309,11 +244,7 @@ public class CaromTable extends JPanel
     	height = (int)(2*radius*ppi);
     	
         for (Ball b: balls) 
-        {   
-/*        	
-        	x = (int)((floorWidth + borderWidth + cushionWidth + b.getPosition().x-radius) * ppi);
-        	y = (int)((floorWidth + borderWidth + cushionWidth + b.getPosition().y-radius) * ppi);
-*/        	
+        {	
         	x = (int)innerTableEdgeX + (int)((b.getPosition().x-radius) * ppi);
         	y = (int)innerTableEdgeY + (int)((b.getPosition().y-radius) * ppi);
         	
@@ -332,21 +263,11 @@ public class CaromTable extends JPanel
     //--------------------------------------------------------------------------------
     public void drawCue(Graphics g, double innerTableEdgeX, double innerTableEdgeY)
     {
-/*    	
-    	double dx = mouseX- ((floorWidth + borderWidth + cushionWidth+currentBall.getPosition().x) * ppi);
-    	double dy = mouseY - ((floorWidth + borderWidth + cushionWidth+currentBall.getPosition().y) * ppi);
- */    	
     	double dx = mouseX - ((innerTableEdgeX/ppi + currentBall.getPosition().x) * ppi);
     	double dy = mouseY - ((innerTableEdgeY/ppi + currentBall.getPosition().y) * ppi);
         	
     	double angle = Math.atan2(dy, dx) - Math.toRadians(90);
-    	cueStick.setAngle(angle);
-
-/*            	
-		cueStick.setPosition(( floorWidth + borderWidth + cushionWidth + currentBall.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
-			(pullDistance + floorWidth + borderWidth +cushionWidth + currentBall.getPosition().y - radius + gap));	
-*/
-    	
+    	cueStick.setAngle(angle);    	
     	cueStick.setPosition((innerTableEdgeX/ppi + currentBall.getPosition().x - BilliardsConstants.CUE_DIAMETER*.5 ) ,
     						 (pullDistance + innerTableEdgeY/ppi + currentBall.getPosition().y - radius + gap));
 	
@@ -358,20 +279,14 @@ public class CaromTable extends JPanel
     					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5)*ppi),
     					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi),
     					(int)((cueStick.getY() + BilliardsConstants.CUE_DIAMETER*.5 + cueStickLength)*ppi)};
-
     	
     	path.updateProp(currentBall.getPosition(), angle);
-    	//path.draw(g,cushionWidth,floorWidth,borderWidth);
+    	
     	path.draw(g, innerTableEdgeX, innerTableEdgeY);
                
     	    	
     	AffineTransform transform = new AffineTransform();
     	AffineTransform oldTransform;
-/*    	
-    	transform.rotate(angle,(floorWidth + borderWidth + cushionWidth + whiteball.getPosition().x )*ppi,
-    			               (floorWidth + borderWidth + cushionWidth + whiteball.getPosition().y  )*ppi);
-*/
-    	
     	transform.rotate(angle, (innerTableEdgeX/ppi + currentBall.getPosition().x )*ppi,
     						    (innerTableEdgeY/ppi + currentBall.getPosition().y  )*ppi);
     	
@@ -381,10 +296,10 @@ public class CaromTable extends JPanel
     	g2d.transform(transform);
 		g2d.setColor(Color.BLUE);
 		g2d.fillArc((int)(cueStick.getX()*ppi) , 
-			   (int)(cueStick.getY()*ppi),
-			   (int)(BilliardsConstants.CUE_DIAMETER*ppi) ,(int)(BilliardsConstants.CUE_DIAMETER*ppi) ,0 ,180);
-	
-		g2d.setColor(new Color(0xDBB84D));
+					(int)(cueStick.getY()*ppi),
+					(int)(BilliardsConstants.CUE_DIAMETER*ppi) ,(int)(BilliardsConstants.CUE_DIAMETER*ppi) ,0 ,180);	
+		
+		g2d.setColor(BilliardsConstants.CUE_COLOR);
 		g2d.fillPolygon(cuesX, cuesY, 4);    	
 		
 		g2d.setTransform(oldTransform);
@@ -431,7 +346,7 @@ public class CaromTable extends JPanel
     		if(redball.isHit() && otherBall.isHit())
     		{    		
     			currentScore.increment();//score updated (flag set internally)
-    			score++;//will be replaced by Score class
+    			//score++;//will be replaced by Score class
     			isSwitchPlayers = false; //reset
     			redball.setIsHit(false);//reset
     			otherBall.setIsHit(false);//reset

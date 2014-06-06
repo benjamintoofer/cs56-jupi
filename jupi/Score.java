@@ -50,6 +50,7 @@ public class Score
 		playerText.setEditable(false);
 		playerText.setHorizontalAlignment(JTextField.CENTER);
 		playerText.setFont(new Font("serif",Font.BOLD,24));
+		playerText.setBackground(color);
 		myPanel.add(playerText);
 		
 	}
