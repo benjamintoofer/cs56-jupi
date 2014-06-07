@@ -10,6 +10,7 @@ import javax.swing.*;
 public class World extends JApplet 
 {
     private static World world = null;
+    public final CaromTable table;
    
     public static void main(String[] args) 
     {        
@@ -43,7 +44,8 @@ public class World extends JApplet
     		throw new RuntimeException();
         int pixelsPerInch = BilliardsConstants.PIXELS_PER_INCH;
         //final CaromTable table = new CaromTable();
-        final JupiTable table = new JupiTable();
+        table = new CaromTable();
+        //final JupiTable table = new JupiTable();
         table.setPixelsPerInch(pixelsPerInch);
         this.add(table);
         
