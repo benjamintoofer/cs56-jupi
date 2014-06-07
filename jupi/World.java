@@ -10,6 +10,9 @@ import javax.swing.*;
 public class World extends JApplet 
 {
     private static World world = null;
+    private final JupiTable jupiTable;
+    private final CaromTable caromTable;
+    private MainMenu menu;
    
     public static void main(String[] args) 
     {        
@@ -42,21 +45,47 @@ public class World extends JApplet
     	if (world != null)
     		throw new RuntimeException();
         int pixelsPerInch = BilliardsConstants.PIXELS_PER_INCH;
+       
+        menu = new MainMenu();
         //final CaromTable table = new CaromTable();
-        final JupiTable table = new JupiTable();
-        table.setPixelsPerInch(pixelsPerInch);
-        this.add(table);
+        jupiTable = new JupiTable();
+        caromTable = new CaromTable();
+        //table.setPixelsPerInch(pixelsPerInch);
+        
+        
+        this.add(menu);
+        
         
         //Game Thread
         Thread gameThread = new Thread(new Runnable()
         {
         	public void run()
-        	{
+        	{System.out.println("here");
         		try
         		{
         			while(true)
         			{
-        				table.update();        				
+        				if(menu.getGame() == "Carom")
+        		        {
+        					if(menu.isVisible())
+        					{
+        						menu.setVisible(false);
+        						world.add(caromTable);
+        					}
+        					
+        					  caromTable.update();
+        					  
+        		        	
+        		        }else if(menu.getGame() == "Jupi"){
+        		        	
+        		        	if(menu.isVisible())
+        					{
+        						menu.setVisible(false);
+        						world.add(jupiTable);
+        					}
+        		        	  jupiTable.update(); 
+        		        }
+        			  
         				Thread.sleep(BilliardsConstants.TIME_SLICE);
         			}
         		}

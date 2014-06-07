@@ -398,6 +398,8 @@ public class JupiTable extends JPanel
 					cueTip = Color.red;
 				}
 				turnBegin = false;
+			}else{
+				currentPlayerScore.setScoreChanged(false);
 			}
 			showCue = true;
 			
