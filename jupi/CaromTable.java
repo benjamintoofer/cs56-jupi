@@ -37,8 +37,8 @@ public class CaromTable extends JPanel
     private Score yellowScore;
     /**Keeps track of current player's score (white or yellow)*/
     private Score currentScore;
-    private int score = 0;//players score
-   
+    /**Score needed to end game (i.e. winning score)*/        
+    private int endScore = 2;
     
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -346,12 +346,20 @@ public class CaromTable extends JPanel
     		
     		if(redball.isHit() && otherBall.isHit())
     		{    		
-    			currentScore.increment();//score updated (flag set internally)
-    			//score++;//will be replaced by Score class
+    			currentScore.increment();//score updated (flag set internally)    			
     			isSwitchPlayers = false; //reset
     			redball.setIsHit(false);//reset
     			otherBall.setIsHit(false);//reset
-    		}else
+    			//check if game over
+    			if (currentScore.getScore() == endScore)
+    			{    				
+    				JOptionPane.showConfirmDialog(this, "Congratulations! You won the game!", "Game Over",
+    											  JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+    				System.exit(0);
+    			}
+    				
+    		}
+    		else
     		{     			
     			currentScore.setScoreChanged(false);
     		}
