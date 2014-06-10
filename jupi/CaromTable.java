@@ -16,10 +16,15 @@ import java.util.EventListener;
 
 public class CaromTable extends JPanel
 {
-	protected AudioClip ballCollisionSound = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));
-	protected AudioClip cushionCollisionSound = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));//TODO:Change sound!
-	protected AudioClip gameWinnerSound 	  = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));//TODO:Change sound!
-	protected AudioClip gameExitSound 	      = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));//TODO:Change sound!
+	//protected AudioClip cueHittingSound       = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));
+	//protected AudioClip cueHittingSound       = Applet.newAudioClip(this.getClass().getResource("wooden_thud_sound.wav"));
+	protected AudioClip cueHittingSound       = Applet.newAudioClip(this.getClass().getResource("click_sound.wav"));
+	protected AudioClip ballCollisionSound    = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));
+	//protected AudioClip cushionCollisionSound = Applet.newAudioClip(this.getClass().getResource("Jump_Sound.wav"));
+	//protected AudioClip cushionCollisionSound = Applet.newAudioClip(this.getClass().getResource("pop_Sound.wav"));
+	protected AudioClip cushionCollisionSound = Applet.newAudioClip(this.getClass().getResource("thud_sound.wav"));
+	protected AudioClip gameWinnerSound 	  = Applet.newAudioClip(this.getClass().getResource("Cheering_Sound.wav"));	
+	protected AudioClip gameExitSound 	      = Applet.newAudioClip(this.getClass().getResource("Ta_Da_Sound.wav"));
 	
 	private double[] dimTable, dimCushion, dimBorder, dimFloor;
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
@@ -44,7 +49,7 @@ public class CaromTable extends JPanel
     /**Keeps track of current player's score (white or yellow)*/
     private Score currentScore;
     /**Score needed to end game (i.e. winning score)*/        
-    private int endScore = 2;
+    private int endScore = 1;
    
     
     /**
@@ -159,9 +164,7 @@ public class CaromTable extends JPanel
         drawBalls(g, innerTableEdgeX, innerTableEdgeY);   
         //Drawing cue stick         
         if(showCue)
-        {        	
-        	//System.out.printf("Score = %d\n", score);        	
-        	    	
+        {	    	
         	drawCue(g, innerTableEdgeX, innerTableEdgeY);
         }//if        
     }//paintComponent
@@ -330,12 +333,11 @@ public class CaromTable extends JPanel
 		if(pullDistance < 0)
 		{//cue will hit ball
 			Physics.hitBall(cueStick,currentBall);
-			ballCollisionSound.play();//testing
+			cueHittingSound.play();
 			pullDistance = 0;
 			
 			isSwitchPlayers = true; //reset 			
 			currentScore.setScoreChanged(false);//reset			
-			
 			redball.setIsHit(false);//reset			
 			whiteball.setIsHit(false);//reset
 			yellowball.setIsHit(false);//reset
@@ -353,7 +355,7 @@ public class CaromTable extends JPanel
     		}
     		
     		if(redball.isHit() && otherBall.isHit())
-    		{    		
+    		{//point scored
     			currentScore.increment();//score updated (flag set internally)    			
     			isSwitchPlayers = false; //reset
     			redball.setIsHit(false);//reset
@@ -364,10 +366,14 @@ public class CaromTable extends JPanel
     				gameWinnerSound.play();
     				JOptionPane.showConfirmDialog(this, "Congratulations! You won the game!", "Game Over",
     											  JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE); 
-    				gameExitSound.play();
-    				System.exit(0);
-   	//-------------------------------------------------------------------
-    			}    				
+    				gameExitSound.play();    				
+    				try {    					
+    					  Thread.sleep(1500L);// let sound finish
+    					}    					
+    				catch (Exception e) {} 
+    				
+    				System.exit(0);   	
+    			}//if endScore			
     		}
     		else
     		{     			
@@ -389,7 +395,10 @@ public class CaromTable extends JPanel
     	//Update each ball
     	for(int i = 0; i < balls.size(); i++)
     	{
-    		Physics.checkCusionCollision(balls.get(i), this);
+    		if (Physics.checkCusionCollision(balls.get(i), this))
+    		{//had cusion collision
+    			cushionCollisionSound.play();
+    		}
     		
     		Ball ball1, ball2;
     		for(int j = i + 1; j < balls.size(); j++)

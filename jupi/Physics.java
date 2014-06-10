@@ -1,17 +1,14 @@
 package jupi;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
 
 import javax.swing.*;
 
 
 public class Physics 
-{	
-	//private static int  ppi = BilliardsConstants.PIXELS_PER_INCH;	
-	
-	//private static boolean isRedHit = false;//checks if current ball has hit red ball    
-	//private static boolean isOtherBallHit = false; //checks if current ball has hit the other (not red) ball (i.e. Yellow or White)    
-	
-	public static void checkCusionCollision(Ball ball,CaromTable table)
+{		
+	public static boolean checkCusionCollision(Ball ball,CaromTable table)
 	{
 		double xPos          = ball.getPosition().x;
 		double yPos          = ball.getPosition().y;
@@ -20,14 +17,15 @@ public class Physics
 		double leftCushion   = 0, 
 			   topCushion    = 0;
 		double bottomCushion = table.getTableHeight();
-		//double pocketGap = 2;
-		
+				
+		boolean isCusionHit = false;
 		
 		//Collision with left wall
 		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0))
 		{
 			ball.setPosition(radius, yPos);
-			ball.reflect(true, false);			
+			ball.reflect(true, false);
+			isCusionHit = true;
 		}
 		
 		//Collision with right wall
@@ -35,6 +33,7 @@ public class Physics
 		{
 			ball.setPosition(rightCushion - radius, yPos);
 			ball.reflect(true, false);
+			isCusionHit = true;
 		}
 
 		//Collision with bottom wall
@@ -42,6 +41,7 @@ public class Physics
 		{	
 			ball.setPosition(xPos, bottomCushion - radius);
 			ball.reflect(false, true);
+			isCusionHit = true;
 		}
 		
 		//Collision with top wall
@@ -49,9 +49,12 @@ public class Physics
 		{
 			ball.setPosition(xPos,radius);
 			ball.reflect(false, true);
+			isCusionHit = true;
 		}	
-		
+			
+		return isCusionHit;
 	}//checkCusionCollision
+	
 	public static void checkCusionCollision(Ball ball,JupiTable table)
 	{
 		double xPos          = ball.getPosition().x;
