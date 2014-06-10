@@ -1,6 +1,7 @@
 package jupi;
 import javax.swing.*;
-
+import java.applet.*;
+import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,7 +16,12 @@ import java.util.EventListener;
 
 public class CaromTable extends JPanel
 {
-    private double[] dimTable, dimCushion, dimBorder, dimFloor;
+	protected AudioClip ballCollisionSound = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));
+	protected AudioClip cushionCollisionSound = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));//TODO:Change sound!
+	protected AudioClip gameWinnerSound 	  = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));//TODO:Change sound!
+	protected AudioClip gameExitSound 	      = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));//TODO:Change sound!
+	
+	private double[] dimTable, dimCushion, dimBorder, dimFloor;
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
     private int ppi;//pixels per inch
     private Ball whiteball, redball, yellowball;
@@ -39,6 +45,7 @@ public class CaromTable extends JPanel
     private Score currentScore;
     /**Score needed to end game (i.e. winning score)*/        
     private int endScore = 2;
+   
     
     /**
      * Default constructor draws all field values from BilliardConstants
@@ -323,6 +330,7 @@ public class CaromTable extends JPanel
 		if(pullDistance < 0)
 		{//cue will hit ball
 			Physics.hitBall(cueStick,currentBall);
+			ballCollisionSound.play();//testing
 			pullDistance = 0;
 			
 			isSwitchPlayers = true; //reset 			
@@ -352,12 +360,14 @@ public class CaromTable extends JPanel
     			otherBall.setIsHit(false);//reset
     			//check if game over
     			if (currentScore.getScore() == endScore)
-    			{    				
+    			{   
+    				gameWinnerSound.play();
     				JOptionPane.showConfirmDialog(this, "Congratulations! You won the game!", "Game Over",
-    											  JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+    											  JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE); 
+    				gameExitSound.play();
     				System.exit(0);
-    			}
-    				
+   	//-------------------------------------------------------------------
+    			}    				
     		}
     		else
     		{     			
@@ -365,13 +375,11 @@ public class CaromTable extends JPanel
     		}
 			showCue = true;			
 
-//-------------------------------------------------------------------
 			if (isSwitchPlayers && !currentScore.isScoreChanged())
 		    {
 		    	switchPlayers();	
 		    	isSwitchPlayers = false; //reset		    	
     		}//if
-//-------------------------------------------------------------------
 		}
 		else
 		{
@@ -391,6 +399,8 @@ public class CaromTable extends JPanel
     			
     			if (Physics.checkBallCollision(ball1, ball2))
     			{//had a collision
+    				ballCollisionSound.play();//testing=========================================
+    				
     				if (ball1.isCurrentBall() == true)
     				{     					 
     					ball2.setIsHit(true);
