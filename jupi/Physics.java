@@ -55,7 +55,7 @@ public class Physics
 		return isCusionHit;
 	}//checkCusionCollision
 	
-	public static void checkCusionCollision(Ball ball,JupiTable table)
+	public static boolean checkCusionCollision(Ball ball,JupiTable table)
 	{
 		double xPos          = ball.getPosition().x;
 		double yPos          = ball.getPosition().y;
@@ -65,13 +65,15 @@ public class Physics
 			   topCushion    = 0;
 		double bottomCushion = table.getTableHeight();
 		double pocketGap = 2;
+		boolean isCusionHit = false;
 		
 		
 		//Collision with left wall
 		if(xPos - radius < leftCushion && (ball.getVelocity().x < 0) && yPos > topCushion + pocketGap && yPos < bottomCushion - pocketGap)
 		{
 			ball.setPosition(radius, yPos);
-			ball.reflect(true, false);			
+			ball.reflect(true, false);	
+			isCusionHit = true;
 		}
 		
 		//Collision with right wall
@@ -79,6 +81,7 @@ public class Physics
 		{
 			ball.setPosition(rightCushion - radius, yPos);
 			ball.reflect(true, false);
+			isCusionHit = true;
 		}
 
 		//Collision with bottom wall
@@ -86,6 +89,7 @@ public class Physics
 		{	
 			ball.setPosition(xPos, bottomCushion - radius);
 			ball.reflect(false, true);
+			isCusionHit = true;
 		}
 		
 		//Collision with top wall
@@ -93,8 +97,9 @@ public class Physics
 		{
 			ball.setPosition(xPos,radius);
 			ball.reflect(false, true);
+			isCusionHit = true;
 		}	
-		
+		return isCusionHit;
 	}//checkCusionCollision
 	
 	

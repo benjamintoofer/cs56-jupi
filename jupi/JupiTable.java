@@ -1,6 +1,8 @@
 package jupi;
 import javax.swing.*;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,6 +16,17 @@ import java.util.ArrayList;
 
 public class JupiTable extends JPanel 
 {
+	 /**Score needed to end game (i.e. winning score)*/        
+    private int endScore = 1;
+   
+	//Sound Effects
+	protected AudioClip cueHittingSound       = Applet.newAudioClip(this.getClass().getResource("click_sound.wav"));
+	protected AudioClip ballCollisionSound    = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));	
+	protected AudioClip cushionCollisionSound = Applet.newAudioClip(this.getClass().getResource("thud_sound.wav"));
+	protected AudioClip inPocketSound         = Applet.newAudioClip(this.getClass().getResource("wooden_thud_sound.wav"));	
+	protected AudioClip gameWinnerSound 	  = Applet.newAudioClip(this.getClass().getResource("Cheering_Sound.wav"));	
+	protected AudioClip gameExitSound 	      = Applet.newAudioClip(this.getClass().getResource("Ta_Da_Sound.wav"));
+	
     private double[] dimTable, dimCushion, dimBorder, dimFloor;
     private double borderCorner, borderWidth, cushionWidth, floorWidth, radius, mass,gap,cueStickLength,pullDistance;
     private int ppi;//pixels per inch
@@ -361,7 +374,7 @@ public class JupiTable extends JPanel
 
     public void update()
     {
-    	//Mouse down even to hit ball
+    	//Mouse down event to hit ball
 		if(mouseDown && pullDistance < BilliardsConstants.MAX_PULL && showCue)
 		{
 			pullDistance += BilliardsConstants.PULL_RATE;
@@ -374,8 +387,8 @@ public class JupiTable extends JPanel
 		if(pullDistance < 0)
 		{
 			Physics.hitBall(cueStick,whiteball);
-			pullDistance = 0;
-			
+			cueHittingSound.play();
+			pullDistance = 0;			
 		}
 		//Check if balls are at rest
 		if(whiteball.getVelocity().x ==0 && whiteball.getVelocity().y == 0
@@ -386,6 +399,22 @@ public class JupiTable extends JPanel
 				&& purpleball.getVelocity().x == 0 && purpleball.getVelocity().y == 0
 				&& orangeball.getVelocity().x == 0 && orangeball.getVelocity().y == 0)
 		{
+			if(currentPlayerScore.isScoreChanged())
+			{//check if game over
+				if (currentPlayerScore.getScore() == endScore)
+				{   
+					gameWinnerSound.play();
+					JOptionPane.showConfirmDialog(this, "Congratulations! You won the game!", "Game Over",
+												  JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE); 
+					gameExitSound.play();    				
+					try {    					
+						  Thread.sleep(1500L);// let sound finish
+						}    					
+					catch (Exception e) {} 
+					
+					System.exit(0);   	
+				}//if endScore			
+			}//if score changed
 			
 			if(!currentPlayerScore.isScoreChanged() && turnBegin)
 			{
@@ -414,11 +443,17 @@ public class JupiTable extends JPanel
     	{
     		
     		
-    		Physics.checkCusionCollision(balls.get(i), this);
+    		if (Physics.checkCusionCollision(balls.get(i), this))
+    		{//had cusion collision
+    			cushionCollisionSound.play();
+    		}
     		
     		for(int j = i + 1; j < balls.size(); j++)
     		{
-    			Physics.checkBallCollision(balls.get(i), balls.get(j));
+    			if (Physics.checkBallCollision(balls.get(i), balls.get(j)))
+    			{//had a collision
+    				ballCollisionSound.play();
+    			}
     		}
     		balls.get(i).update();
     		
@@ -428,6 +463,7 @@ public class JupiTable extends JPanel
     			boolean ballIn = Physics.checkInPocket(balls.get(i),p);
     			if(ballIn)
     			{
+    				inPocketSound.play();
     				currentPlayerScore.increment();
     				currentPlayerScore.setScoreChanged(true);
     				balls.remove(i);

@@ -16,6 +16,7 @@ import java.util.EventListener;
 
 public class CaromTable extends JPanel
 {
+	//Sound Effects
 	//protected AudioClip cueHittingSound       = Applet.newAudioClip(this.getClass().getResource("ball_collision_sound.wav"));
 	//protected AudioClip cueHittingSound       = Applet.newAudioClip(this.getClass().getResource("wooden_thud_sound.wav"));
 	protected AudioClip cueHittingSound       = Applet.newAudioClip(this.getClass().getResource("click_sound.wav"));
@@ -408,7 +409,7 @@ public class CaromTable extends JPanel
     			
     			if (Physics.checkBallCollision(ball1, ball2))
     			{//had a collision
-    				ballCollisionSound.play();//testing=========================================
+    				ballCollisionSound.play();
     				
     				if (ball1.isCurrentBall() == true)
     				{     					 
