@@ -50,7 +50,7 @@ public class CaromTable extends JPanel
     /**Keeps track of current player's score (white or yellow)*/
     private Score currentScore;
     /**Score needed to end game (i.e. winning score)*/        
-    private int endScore = 1;
+    private int endScore = 2;
    
     
     /**
